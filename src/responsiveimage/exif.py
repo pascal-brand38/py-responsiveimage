@@ -7,6 +7,8 @@ TODO
 
 import json
 from datetime import datetime
+import shutil
+import os
 from PIL import ExifTags   # python -m pip install --upgrade pillow
 
 
@@ -68,3 +70,9 @@ def getExif(image, fullFilename, ext:str):
     epoch = 0
 
   return exif, epoch
+
+
+def updateFilestat(srcFullFilename, dstFullFilename, epoch):
+  shutil.copystat(srcFullFilename, dstFullFilename)
+  if (epoch != 0):
+    os.utime(dstFullFilename, (epoch, epoch))

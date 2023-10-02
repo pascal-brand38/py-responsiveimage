@@ -9,6 +9,16 @@ class argsResponsiveImage(object):
   def __init__(self, argsparsed, nb:int|None=None):
     self.args = argsparsed
     self.nb = nb
+    self.parameters = {
+      'jpg': {
+        'quality': 80,
+        'progressive': True,
+        'subsampling': '4:2:0',
+        },
+      'webp': {
+        'quality': 80,
+      }
+    }
 
   def inc(self):
     if self.nb is not None:

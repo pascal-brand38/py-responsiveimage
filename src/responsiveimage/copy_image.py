@@ -19,7 +19,7 @@ def _copy_file(filename_src:str, filename_dst:str):
       print('   === cannot copy ' + filename_src + ' to ' + filename_dst)
 
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype: str):
   args.inc()
   if os.path.isfile(os.path.join(args.args.dst_dir, filename)):
     args.print(filename, False)
