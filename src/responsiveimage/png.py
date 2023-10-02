@@ -13,7 +13,7 @@ from . import argsResponsiveImage
 from . import exif as getexif
 
 
-
+# TODO: lots of common code with jpg
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
   args.inc()
   srcFullFilename = os.path.join(args.args.src_dir, filename)

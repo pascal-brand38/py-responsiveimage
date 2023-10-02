@@ -49,8 +49,6 @@ def main():
   if not os.path.isdir(args.args.dst_dir):
     os.mkdir(args.args.dst_dir)
 
-  nb = 0
-  last_epoch = 0
   for filename in os.listdir(args.args.src_dir):
     kind = filetype.guess(args.args.src_dir + '/' + filename)
     if kind is None:
