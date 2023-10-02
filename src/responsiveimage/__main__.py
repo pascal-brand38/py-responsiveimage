@@ -10,6 +10,7 @@ import os
 import filetype
 from . import gif
 from . import jpg
+from . import png
 from . import argsResponsiveImage
 
 
@@ -60,6 +61,8 @@ def main():
       gif.responsive(args, filename)
     elif (kind.extension == 'jpg'):
       jpg.responsive(args, filename)
+    elif (kind.extension == 'png'):
+      png.responsive(args, filename)
     else:
       print('File type ' + kind.extension + ' not supported - file ' + filename)
 
