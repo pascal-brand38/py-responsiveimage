@@ -19,12 +19,13 @@ classifiers = [
 ]
 dependencies = [
   'Pillow',
+  'filetype',
 ]
 
 
 [project.urls]
-"Homepage" = "https://github.com/pascal-brand38/py-responsive-image"
-"Bug Tracker" = "https://github.com/pascal-brand38/py-responsive-image/issues"
+"Homepage" = "https://github.com/pascal-brand38/py-responsiveimage"
+"Bug Tracker" = "https://github.com/pascal-brand38/py-responsiveimage/issues"
 
 
 # include data in the python package
