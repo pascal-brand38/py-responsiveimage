@@ -8,7 +8,7 @@ TODO
 import os
 import shutil
 import filecmp
-from . import argsResponsiveImages
+from . import argsResponsiveImage
 
 def _copy_file(filename_src:str, filename_dst:str):
   # as we check whether the files are the same or not, no need to force
@@ -18,10 +18,12 @@ def _copy_file(filename_src:str, filename_dst:str):
     except:
       print('   === cannot copy ' + filename_src + ' to ' + filename_dst)
 
-def responsive(args: argsResponsiveImages.argsResponsiveImages, filename):
+
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
   args.inc()
-  if os.path.isfile(args.args.dst_dir + '/' + filename):
+  if os.path.isfile(os.path.join(args.args.dst_dir, filename)):
     args.print(filename, False)
-  else:
-    args.print(filename, True)
-    _copy_file(args.args.src_dir + '/' + filename, args.args.dst_dir + '/' + filename)
+    return
+
+  args.print(filename, True)
+  _copy_file(os.path.join(args.args.src_dir, filename), os.path.join(args.args.dst_dir, filename))

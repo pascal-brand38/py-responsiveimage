@@ -7,16 +7,11 @@ TODO
 
 import argparse
 import os
-import filecmp
-import shutil, subprocess
-from datetime import datetime
-import json
 import filetype
 from . import gif
+from . import jpg
 from . import argsResponsiveImage
 
-# python -m pip install --upgrade pillow
-from PIL import Image, ImageOps, ExifTags
 
 def _createParser():
   parser = argparse.ArgumentParser(
@@ -46,19 +41,6 @@ def _createParser():
   return parser
 
 
-def printExifTags(exif):
-  info = None
-  for key, val in exif.items():
-    if key in ExifTags.TAGS:
-      print(f'{key}:{ExifTags.TAGS[key]}:{val}')
-      if ExifTags.TAGS[key] == "ExifOffset":   # from https://github.com/python-pillow/Pillow/issues/5863
-        info = exif.get_ifd(key)
-  if info:
-    for key, val in info.items():
-      if key in ExifTags.TAGS:
-        print(f'{key}:{ExifTags.TAGS[key]}:{val}')
-
-
 def main():
   parser = _createParser()
   args = argsResponsiveImage.argsResponsiveImage(parser.parse_args(), 0)
@@ -76,6 +58,8 @@ def main():
     # See kind.EXTENSION for supported extensions
     if (kind.extension == 'gif'):
       gif.responsive(args, filename)
+    elif (kind.extension == 'jpg'):
+      jpg.responsive(args, filename)
     else:
       print('File type ' + kind.extension + ' not supported - file ' + filename)
 
