@@ -65,7 +65,8 @@ def main(cmdargs):
       pil_image.responsive(args, filename, kind.extension)
     elif (kind.extension == 'mp4'):
       mp4.responsive(args, filename)
-    elif (kind.extension == 'gif') or (filename.endswith('.svg')):
+    #elif (kind.extension == 'gif') or (filename.endswith('.svg')):
+    elif (kind.extension == 'gif') or (kind.extension == 'svg'):
       copy_image.responsive(args, filename, kind.extension)
     else:
       print('File type ' + kind.extension + ' not supported - file ' + filename)

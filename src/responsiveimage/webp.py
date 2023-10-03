@@ -12,5 +12,5 @@ from . import exif as getexif
 # method=6 provides a better size, but is slow
 def save(image, srcFullFilename, dstFullFilename, epoch, args: argsResponsiveImage.argsResponsiveImage):
   parameters = args.parameters['webp']
-  image.save(dstFullFilename, method=6, quality=parameters.quality)
+  image.save(dstFullFilename, method=6, quality=parameters['quality'])
   getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)

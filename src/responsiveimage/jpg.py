@@ -11,7 +11,7 @@ from . import exif as getexif
 def save(image, srcFullFilename, dstFullFilename, exif, epoch, args: argsResponsiveImage.argsResponsiveImage):
   parameters = args.parameters['jpg']
   if exif:
-    image.save(dstFullFilename, quality=parameters.quality, progressive=parameters.progressive, optimize=True, subsampling='4:2:0', exif=exif)
+    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'], exif=exif)
   else:
-    image.save(dstFullFilename, quality=parameters.quality, progressive=parameters.progressive, optimize=True, subsampling='4:2:0')
+    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'])
   getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)
