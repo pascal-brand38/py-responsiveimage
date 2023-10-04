@@ -9,7 +9,6 @@ import argparse
 import os
 import sys
 import filetype
-from . import webp
 from . import copy_image
 from . import pil_image
 from . import mp4
@@ -40,6 +39,10 @@ def _createParser():
                       help='TODO',
                       required=False,
                       default='/tmp/reduced')
+  parser.add_argument('--size',
+                      help='TODO',
+                      required=False,
+                      default='1920')
   parser.add_argument('--export-to-webp',
                       help='png and jpg are exported in webp format too',
                       required=False,
@@ -63,7 +66,8 @@ def main(cmdargs):
     kind = filetype.guess(args.args.src_dir + '/' + filename)
     if kind is None:
       (_, extension) = os.path.splitext(filename)
-      extension = extension[1:].lower()
+      if extension != '':
+        extension = extension[1:].lower()
     else:
       extension = kind.extension
 
