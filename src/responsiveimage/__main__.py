@@ -56,20 +56,27 @@ def main(cmdargs):
     os.mkdir(args.args.dst_dir)
 
   for filename in os.listdir(args.args.src_dir):
-    kind = filetype.guess(args.args.src_dir + '/' + filename)
-    if kind is None:
+    if not os.path.isfile(os.path.join(args.args.src_dir, filename)):
+      print('Skip directory ' + filename)
       continue
 
-    # See kind.EXTENSION for supported extensions
-    if (kind.extension == 'jpg') or (kind.extension == 'png') or (kind.extension == 'webp'):
-      pil_image.responsive(args, filename, kind.extension)
-    elif (kind.extension == 'mp4'):
-      mp4.responsive(args, filename)
-    #elif (kind.extension == 'gif') or (filename.endswith('.svg')):
-    elif (kind.extension == 'gif') or (kind.extension == 'svg'):
-      copy_image.responsive(args, filename, kind.extension)
+    kind = filetype.guess(args.args.src_dir + '/' + filename)
+    if kind is None:
+      (_, extension) = os.path.splitext(filename)
+      extension = extension[1:].lower()
     else:
-      print('File type ' + kind.extension + ' not supported - file ' + filename)
+      extension = kind.extension
+
+
+    # See kind.EXTENSION for supported extensions
+    if (extension == 'jpg') or (extension == 'png') or (extension == 'webp'):
+      pil_image.responsive(args, filename, extension)
+    elif (extension == 'mp4'):
+      mp4.responsive(args, filename)
+    elif (extension == 'gif') or (extension == 'svg'):
+      copy_image.responsive(args, filename, extension)
+    else:
+      print('File extension ' + extension + ' not supported - file ' + filename)
 
 if __name__ == "__main__":
   main(sys.argv[1:])

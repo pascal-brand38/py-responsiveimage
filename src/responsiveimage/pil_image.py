@@ -52,7 +52,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
     webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
   elif filetype == 'png':
     # TODO: optipng call too
-    png.save(image, srcFullFilename, dstFullFilename, epoch, args)
+    png.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
 
   if filetype!='webp' and args.args.export_to_webp:
     (name, _) = os.path.splitext(dstFullFilename)
