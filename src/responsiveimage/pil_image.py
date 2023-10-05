@@ -14,16 +14,41 @@ from . import webp
 from . import png
 from . import jpg
 
+def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
+  sizes = args.args.size.split(',')
+  dstFullFilenames = []
+  if (len(sizes) == 1):
+    d = os.path.join(args.args.dst_dir, filename)
+    dstFullFilenames.append(d)
+    if filetype!='webp' and args.args.export_to_webp:
+      (name, _) = os.path.splitext(d)
+      dstFullFilenames.append(name + '.webp')
+  else:
+    (srcName, srcExt) = os.path.splitext(filename)
+    for size in sizes:
+      d = os.path.join(args.args.dst_dir, srcName + '-' + size + srcExt)
+      dstFullFilenames.append(d)
+      if filetype!='webp' and args.args.export_to_webp:
+        (name, _) = os.path.splitext(d)
+        dstFullFilenames.append(name + '.webp')
+
+  for name in dstFullFilenames:
+    if not os.path.isfile(name):
+      return True
+  return False
+
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
   args.inc()
-  srcFullFilename = os.path.join(args.args.src_dir, filename)
-  dstFullFilename = os.path.join(args.args.dst_dir, filename)
-  if os.path.isfile(dstFullFilename):
+  if not missingOutput(args, filename, filetype):
     args.print(filename, False)
     return
 
+  srcFullFilename = os.path.join(args.args.src_dir, filename)
+  (srcName, srcExt) = os.path.splitext(filename)
+
   args.print(filename, True)
   image_org = Image.open(srcFullFilename)
+  sizes = args.args.size.split(',')
 
   # from https://stackoverflow.com/questions/13872331/rotating-an-image-with-orientation-specified-in-exif-using-python-without-pil-in
   if (args.args.rotate):
@@ -34,8 +59,11 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   height = image_org.height
   max_size = max(width, height)
 
-  sizes = args.args.size.split(',')
   for size in sizes:
+    if (len(sizes) == 1):
+      dstFullFilename = os.path.join(args.args.dst_dir, filename)
+    else:
+      dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-' + size + srcExt)
     f = int(size) / max_size
     if (f < 1):
       image = image_org.resize((int(width * f), int(height * f)))
