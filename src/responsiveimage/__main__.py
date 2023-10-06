@@ -48,6 +48,11 @@ def _createParser():
                       required=False,
                       default=False,
                       action='store_true')
+  parser.add_argument('--mp4-as-gif',
+                      help='mp4 saved as .gif and .webo',
+                      required=False,
+                      default=False,
+                      action='store_true')
   return parser
 
 
