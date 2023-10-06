@@ -83,6 +83,34 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
       dstFullFilename = name + '.webp'
       webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
 
+  # TODO: make it generic
+  # used for slides image:
+  # - slide aspect-ratio on screen > 512px:  1/4, that is width=1024 and height=256
+  # - slide aspect-ratio on screen >= 512px: 2/5, that is width=512 and height=205 ==> crop can be performed
+  # 256 height
+  if (filetype == 'jpg') and (height == 256):   # this is a slide image
+    image = image_org
+    dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-h256.jpg')
+    jpg.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
+
+    dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-h256.webp')
+    webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
+
+    if (width == 1024):
+      width = height * 5/2
+      image = image.crop((0, 0, width, height))
+
+    # image for slides on small screen (max 512px wide)
+    f = (512 * 2/5) / height
+    image = image.resize((int(width * f), int(height * f)))
+
+    dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-hsmall.jpg')
+    jpg.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
+
+    dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-hsmall.webp')
+    webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
+
+
 # TODO: noRafale
 #       if (args.noRafale) and (epoch!=0) and (epoch-last_epoch < args.noRafale) and (epoch>=last_epoch):
 #         print('Skip as date acquisition too close')
