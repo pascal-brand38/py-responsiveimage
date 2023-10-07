@@ -2,7 +2,8 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-TODO
+mp4 utility functions:
+- save
 '''
 
 import os
@@ -11,6 +12,16 @@ import subprocess
 from . import argsResponsiveImage
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
+  '''
+  process mp4 file filename (only the filename, without src_dir)
+
+  if args.args.mp4_as_gif:
+  - create animated gif and webp
+
+  otherwise
+  - rescale mp4 (TODO: right now 1024)
+  '''
+
   args.inc()
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
@@ -70,7 +81,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
       'ffmpeg',
       '-i', srcFullFilename,
       '-map_metadata', '0',   # copy video media properties - keep this option right after the -i option
-      '-vf', 'scale=1024:-1',
+      '-vf', 'scale=1024:-1',   # todo: scale
       dstFullFilename,
       '-loglevel', 'quiet'
       ])

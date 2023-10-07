@@ -2,7 +2,7 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-TODO
+Main function of responsiveimage package
 '''
 
 import argparse
@@ -15,6 +15,9 @@ from . import mp4
 from . import argsResponsiveImage
 
 def _createParser():
+  '''
+  parse commandline options
+  '''
   parser = argparse.ArgumentParser(
      prog='responsiveimage',
      description='Create different image versions (size, quality, format) from original images',
@@ -57,6 +60,9 @@ def _createParser():
 
 
 def main(cmdargs):
+  '''
+  main function of python package responsiveimage
+  '''
   parser = _createParser()
   args = argsResponsiveImage.argsResponsiveImage(parser.parse_args(cmdargs), 0)
 
@@ -78,11 +84,11 @@ def main(cmdargs):
 
 
     # See kind.EXTENSION for supported extensions
-    if (extension == 'jpg') or (extension == 'png') or (extension == 'webp'):
+    if extension in [ 'jpg', 'png', 'webp' ]:
       pil_image.responsive(args, filename, extension)
-    elif (extension == 'mp4'):
+    elif extension in [ 'mp4' ]:
       mp4.responsive(args, filename)
-    elif (extension == 'gif') or (extension == 'svg'):
+    elif extension in [ 'gif', 'svg' ]:
       copy_image.responsive(args, filename, extension)
     else:
       print('File extension ' + extension + ' not supported - file ' + filename)

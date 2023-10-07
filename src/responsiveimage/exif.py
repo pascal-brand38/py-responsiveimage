@@ -2,7 +2,10 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-TODO
+exif and file utility functions:
+- printExifTags
+- getExif(image, fullFilename, ext:str):
+- updateFilestat
 '''
 
 import json
@@ -11,8 +14,10 @@ import shutil
 import os
 from PIL import ExifTags   # python -m pip install --upgrade pillow
 
-
 def printExifTags(exif):
+  '''
+  print exif tags
+  '''
   info = None
   for key, val in exif.items():
     if key in ExifTags.TAGS:
@@ -26,6 +31,11 @@ def printExifTags(exif):
 
 
 def getExif(image, fullFilename, ext:str):
+  '''
+  get exif data AND epoch time of creation of the file
+  it may take advantage of .json file, as used by google photo, when the
+  exif is not found
+  '''
   try:
     exif = image.getexif()
   except:
@@ -54,7 +64,7 @@ def getExif(image, fullFilename, ext:str):
     # no acquisition date in exif nor png metadata
     # check if a json file exist (from a google photo for example)
     try:
-      with open(fullFilename + '.json') as json_file:
+      with open(fullFilename + '.json', encoding='utf-8') as json_file:
         jsonData = json.load(json_file)
         epoch = int(jsonData['photoTakenTime']['timestamp'])
         dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
@@ -73,6 +83,10 @@ def getExif(image, fullFilename, ext:str):
 
 
 def updateFilestat(srcFullFilename, dstFullFilename, epoch):
+  '''
+  update stat file of dstFullFilename given srcFullFilename, as well as the
+  epoch time when not zero
+  '''
   shutil.copystat(srcFullFilename, dstFullFilename)
   if (epoch != 0):
     os.utime(dstFullFilename, (epoch, epoch))

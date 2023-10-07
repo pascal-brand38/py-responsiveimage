@@ -2,7 +2,7 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-TODO
+create responsive images, based on list of sizes
 '''
 
 import os
@@ -15,6 +15,10 @@ from . import png
 from . import jpg
 
 def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
+  '''
+  return True if one of the output is missing
+  In that case, further processing is skipped
+  '''
   sizes = args.args.size.split(',')
   dstFullFilenames = []
   if (len(sizes) == 1):
@@ -38,6 +42,9 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
   return False
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
+  '''
+  create responsive version of the images
+  '''
   args.inc()
   if not missingOutput(args, filename, filetype):
     args.print(filename, False)
@@ -55,18 +62,14 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
     image_org = ImageOps.exif_transpose(image_org)
   exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
 
-  width = image_org.width
-  height = image_org.height
-  max_size = max(width, height)
-
   for size in sizes:
     if (len(sizes) == 1):
       dstFullFilename = os.path.join(args.args.dst_dir, filename)
     else:
       dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-' + size + srcExt)
-    f = int(size) / max_size
+    f = int(size) / max(image_org.width, image_org.height)
     if (f < 1):
-      image = image_org.resize((int(width * f), int(height * f)))
+      image = image_org.resize((int(image_org.width * f), int(image_org.height * f)))
     else:
       image = image_org
 
@@ -83,12 +86,39 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
       dstFullFilename = name + '.webp'
       webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
 
-  # TODO: make it generic
-  # used for slides image:
-  # - slide aspect-ratio on screen > 512px:  1/4, that is width=1024 and height=256
-  # - slide aspect-ratio on screen >= 512px: 2/5, that is width=512 and height=205 ==> crop can be performed
-  # 256 height
+  _hack(image_org, srcFullFilename, args, exif, epoch, filetype)
+
+
+# TODO: noRafale
+#       if (args.noRafale) and (epoch!=0) and (epoch-last_epoch < args.noRafale) and (epoch>=last_epoch):
+#         print('Skip as date acquisition too close')
+#         last_epoch = epoch
+#         continue
+
+#       last_epoch = epoch
+
+
+# TODO: make it generic
+# used for slides image:
+# - slide aspect-ratio on screen > 512px:  1/4, that is width=1024 and height=256
+# - slide aspect-ratio on screen >= 512px: 2/5, that is width=512 and height=205 ==> crop can be performed
+# 256 height
+
+def _hack(image_org, srcFullFilename, args, exif, epoch, filetype):
+  '''
+  hack to crop images in special case for slides
+  TODO: make this hack clean
+
+  - slide aspect-ratio on screen > 512px:  1/4, that is width=1024 and height=256
+  - slide aspect-ratio on screen >= 512px: 2/5, that is width=512 and height=205
+    ==> crop can be performed 256 height
+  '''
+  width = image_org.width
+  height = image_org.height
+
   if (filetype == 'jpg') and (height == 256):   # this is a slide image
+    (srcName, _) = os.path.splitext(srcFullFilename)
+
     image = image_org
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-h256.jpg')
     jpg.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
@@ -109,12 +139,3 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-hsmall.webp')
     webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
-
-
-# TODO: noRafale
-#       if (args.noRafale) and (epoch!=0) and (epoch-last_epoch < args.noRafale) and (epoch>=last_epoch):
-#         print('Skip as date acquisition too close')
-#         last_epoch = epoch
-#         continue
-
-#       last_epoch = epoch
