@@ -6,7 +6,8 @@ create responsive images, based on list of sizes
 '''
 
 import os
-from PIL import Image, ImageOps    # python -m pip install --upgrade pillow
+from PIL import Image     # python -m pip install --upgrade pillow
+# from PIL import ImageOps
 
 from . import argsResponsiveImage
 from . import exif as getexif
@@ -58,8 +59,8 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   sizes = args.args.size.split(',')
 
   # from https://stackoverflow.com/questions/13872331/rotating-an-image-with-orientation-specified-in-exif-using-python-without-pil-in
-  if (args.args.rotate):
-    image_org = ImageOps.exif_transpose(image_org)
+  # if (args.args.rotate):
+  #   image_org = ImageOps.exif_transpose(image_org)
   exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
 
   for size in sizes:

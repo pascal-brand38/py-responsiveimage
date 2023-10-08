@@ -2,7 +2,7 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-Unit testing
+Unit testing for png only
 """
 
 import filecmp

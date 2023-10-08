@@ -24,26 +24,26 @@ def _createParser():
      formatter_class=argparse.RawTextHelpFormatter
      )
 
-  parser.add_argument('--rotate',
-                      help='TODO',
-                      required=False,
-                      default=False,
-                      action='store_true')
-  parser.add_argument('--no-rafale',
-                      help='TODO',
-                      required=False,
-                      default=False,
-                      action='store_true')
+  # parser.add_argument('--rotate',
+  #                     help='TODO',
+  #                     required=False,
+  #                     default=False,
+  #                     action='store_true')
+  # parser.add_argument('--no-rafale',
+  #                     help='TODO',
+  #                     required=False,
+  #                     default=False,
+  #                     action='store_true')
   parser.add_argument('--src-dir',
-                      help='TODO',
+                      help='source directory',
                       required=False,
                       default='/tmp/toreduce')
   parser.add_argument('--dst-dir',
-                      help='TODO',
+                      help='destination directory',
                       required=False,
                       default='/tmp/reduced')
   parser.add_argument('--size',
-                      help='TODO',
+                      help='list of sizes, separetd by commas, of different scale. Ex: 1024,512',
                       required=False,
                       default='1920')
   parser.add_argument('--export-to-webp',

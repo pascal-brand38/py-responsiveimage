@@ -2,7 +2,7 @@
 MIT License
 Copyright (c) 2023 Pascal Brand
 
-TODO
+Extends argparse
 '''
 
 class argsResponsiveImage():
@@ -12,7 +12,7 @@ class argsResponsiveImage():
   def __init__(self, argsparsed, nb):
     self.args = argsparsed
     self.nb = nb
-    self.parameters = {
+    self.parameters = {   # TODO: add a commandline option to update it dynamically
       'jpg': {
         'quality': 80,
         'progressive': True,
