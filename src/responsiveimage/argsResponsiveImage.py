@@ -9,7 +9,7 @@ class argsResponsiveImage():
   '''
   extends argparse
   '''
-  def __init__(self, argsparsed, nb:int|None=None):
+  def __init__(self, argsparsed, nb):
     self.args = argsparsed
     self.nb = nb
     self.parameters = {
