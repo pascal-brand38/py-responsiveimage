@@ -26,3 +26,9 @@
 [project.urls]
   "Homepage" = "https://github.com/pascal-brand38/py-responsiveimage"
   "Bug Tracker" = "https://github.com/pascal-brand38/py-responsiveimage/issues"
+
+# https://stackoverflow.com/questions/10253826/path-issue-with-pytest-importerror-no-module-named
+[tool.pytest.ini_options]
+  pythonpath = [
+    "src"
+  ]
