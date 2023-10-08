@@ -1,40 +1,28 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+  requires = ["setuptools>=61.0"]
+  build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "responsiveimage"
-version = "0.0.1"
-authors = [
-  { name="Pascal Brand", email="pascal.brand38@gmail.com" },
-]
-description = "TODO"
-readme = "README.md"
-requires-python = ">=3.8"     # as Pillow requires >= 3.8
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
-dependencies = [
-  'Pillow',
-  'filetype',
-]
+  name = "responsiveimage"
+  description = "Create different scaled versions of an image, in webp, jpg, png, svg,... to be used on resposive website"
+  version = "1.0.0"
+  authors = [
+    { name="Pascal Brand", email="pascal.brand38@gmail.com" },
+  ]
+  readme = "README.md"
+  requires-python = ">=3.8"     # as Pillow requires >= 3.8
+  classifiers = [
+      "Programming Language :: Python :: 3",
+      "License :: OSI Approved :: MIT License",
+      "Operating System :: OS Independent",
+  ]
+  dependencies = [
+    'Pillow',
+    'filetype',
+  ]
 
 
 [project.urls]
-"Homepage" = "https://github.com/pascal-brand38/py-responsiveimage"
-"Bug Tracker" = "https://github.com/pascal-brand38/py-responsiveimage/issues"
-
-
-# include data in the python package
-# datas are used by __main__.py when demo
-[tool.setuptools.package-data]
-"spriteforhtml" = ["data/*"]
-
-# https://stackoverflow.com/questions/10253826/path-issue-with-pytest-importerror-no-module-named
-[tool.pytest.ini_options]
-pythonpath = [
-  "src"
-]
+  "Homepage" = "https://github.com/pascal-brand38/py-responsiveimage"
+  "Bug Tracker" = "https://github.com/pascal-brand38/py-responsiveimage/issues"
