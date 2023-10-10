@@ -11,7 +11,7 @@ from responsiveimage import __main__
 
 def test_png():
   """
-  Test using a json file
+  Test
   """
   srcdir = 'tests/data/png'
   refdir = srcdir + '/' + 'ref'

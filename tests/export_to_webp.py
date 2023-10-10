@@ -9,9 +9,9 @@ import filecmp
 import tempfile
 from responsiveimage import __main__
 
-def test_png():
+def test_export_to_webp():
   """
-  Test using a json file
+  Test
   """
   srcdir = 'tests/data/export_to_webp'
   refdir = srcdir + '/' + 'ref'

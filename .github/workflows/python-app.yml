@@ -31,6 +31,8 @@ jobs:
         pip install flake8 pytest pylint Pillow filetype
 
     - name: Install Linux dependencies
+      # https://ubuntuhandbook.org/index.php/2023/03/ffmpeg-6-0-released-how-to-install-in-ubuntu-22-04-20-04/
+      # sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
       if: startsWith(matrix.os, 'ubuntu')
       run: |
         sudo apt-get install optipng ffmpeg
@@ -42,6 +44,10 @@ jobs:
       if: startsWith(matrix.os, 'windows')
       run: |
         choco install optipng ffmpeg
+
+    - name: Show versions
+      run: |
+        ffmpeg -version
 
     - name: Lint with flake8
       run: |
@@ -63,4 +69,4 @@ jobs:
         pylint --indent-string='  ' --disable C0103,C0301,C0325,R0913,R1705,W0511,W0613,W0702,W0718 $(git ls-files '*.py')
     - name: Test with pytest
       run: |
-        pytest tests/png.py
+        pytest tests/png.py tests/export_to_webp.py tests/mp4.py

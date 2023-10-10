@@ -9,6 +9,7 @@ mp4 utility functions:
 import os
 import shutil
 import subprocess
+import tempfile
 from . import argsResponsiveImage
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
@@ -40,7 +41,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
     args.print(filename, True)
 
     # mp4 -> gif: https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality
-    palette='tmp/palette.png'
+    palette = tempfile.gettempdir() + '/palette.png'
     filters='fps=2,scale=-1:-1:flags=lanczos'
 
     subprocess.call([
