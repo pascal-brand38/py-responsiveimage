@@ -30,6 +30,19 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
         return True
   return False
 
+def transform(image_org, value, what):
+  '''
+  Transform original image
+  '''
+  if what == 0:
+    f = int(value) / max(image_org.width, image_org.height)
+  else:
+    f = int(value) / image_org.height
+  if (f < 1):
+    return image_org.resize((int(image_org.width * f), int(image_org.height * f)))
+  else:
+    return image_org
+
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
   '''
   create responsive version of the images
@@ -38,27 +51,29 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   if not missingOutput(args, filename, filetype):
     args.print(filename, False)
     return
+  args.print(filename, True)
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
+  image_org = Image.open(srcFullFilename)
+
   (srcName, srcExt) = os.path.splitext(filename)
 
-  args.print(filename, True)
-  image_org = Image.open(srcFullFilename)
-  sizes = args.args.size.split(',')
   adds = args.args.add_name.split(',')
+  if args.args.size is not None:
+    transforms = args.args.size.split(',')
+    what = 0
+  else:
+    transforms = args.args.height.split(',')
+    what = 1
 
   # from https://stackoverflow.com/questions/13872331/rotating-an-image-with-orientation-specified-in-exif-using-python-without-pil-in
   # if (args.args.rotate):
   #   image_org = ImageOps.exif_transpose(image_org)
   exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
 
-  for index in range(sizes):
+  for index in range(adds):
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
-    f = int(sizes[index]) / max(image_org.width, image_org.height)
-    if (f < 1):
-      image = image_org.resize((int(image_org.width * f), int(image_org.height * f)))
-    else:
-      image = image_org
+    image = transform(image_org, transforms[index], what)
 
     if filetype == 'jpg':
       jpg.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
