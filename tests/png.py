@@ -16,7 +16,7 @@ def test_png():
   srcdir = 'tests/data/png'
   refdir = srcdir + '/' + 'ref'
   tempdir = tempfile.gettempdir()
-  __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir ])
+  __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir, '--force' ])
 
   # compare binary files
   for file in [ 'lpo' ]:

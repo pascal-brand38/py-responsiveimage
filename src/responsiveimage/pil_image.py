@@ -48,7 +48,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   create responsive version of the images
   '''
   args.inc()
-  if not missingOutput(args, filename, filetype):
+  if (not args.args.force) and (not missingOutput(args, filename, filetype)):
     args.print(filename, False)
     return
   args.print(filename, True)
@@ -71,7 +71,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   #   image_org = ImageOps.exif_transpose(image_org)
   exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
 
-  for index in range(adds):
+  for index, _ in enumerate(adds):
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
     image = transform(image_org, transforms[index], what)
 

@@ -16,7 +16,7 @@ def test_export_to_webp():
   srcdir = 'tests/data/export_to_webp'
   refdir = srcdir + '/' + 'ref'
   tempdir = tempfile.gettempdir()
-  __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir, '--export-to-webp', '--size', '256,128' ])
+  __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir, '--export-to-webp', '--size', '256,128', '--force' ])
 
   # compare binary files
   for file in [

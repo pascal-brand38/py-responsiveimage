@@ -42,7 +42,7 @@ def test_animated():
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
   resdir = tempfile.gettempdir()
-  __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--mp4-as-gif' ])
+  __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--mp4-as-gif', '--force' ])
 
   # this is not possible to compare binary files because of ffmpeg version
   # which is not constant over time and os

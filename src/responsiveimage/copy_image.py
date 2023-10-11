@@ -28,7 +28,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype
   used for gif and svg
   '''
   args.inc()
-  if os.path.isfile(os.path.join(args.args.dst_dir, filename)):
+  if (not args.args.force) and (os.path.isfile(os.path.join(args.args.dst_dir, filename))):
     args.print(filename, False)
     return
 
