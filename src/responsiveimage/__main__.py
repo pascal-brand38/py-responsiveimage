@@ -43,9 +43,13 @@ def _createParser():
                       required=False,
                       default='/tmp/reduced')
   parser.add_argument('--size',
-                      help='list of sizes, separetd by commas, of different scale. Ex: 1024,512',
+                      help='list of sizes, separated by commas, of different scale. Ex: 1024,512',
                       required=False,
-                      default='1920')
+                      default=None)
+  parser.add_argument('--height',
+                      help='list of heights, separated by commas, of different scale. Ex: 1024,512. Cannot be used when --size',
+                      required=False,
+                      default=None)
   parser.add_argument('--export-to-webp',
                       help='png and jpg are exported in webp format too',
                       required=False,
@@ -56,6 +60,11 @@ def _createParser():
                       required=False,
                       default=False,
                       action='store_true')
+  parser.add_argument('--add-name',
+                      help='list of added name. Default is nothing when a single transform, or size otherwise',
+                      required=False,
+                      default=None)
+
   return parser
 
 

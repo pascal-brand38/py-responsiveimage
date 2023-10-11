@@ -20,26 +20,14 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
   return True if one of the output is missing
   In that case, further processing is skipped
   '''
-  sizes = args.args.size.split(',')
-  dstFullFilenames = []
-  if (len(sizes) == 1):
-    d = os.path.join(args.args.dst_dir, filename)
-    dstFullFilenames.append(d)
-    if filetype!='webp' and args.args.export_to_webp:
-      (name, _) = os.path.splitext(d)
-      dstFullFilenames.append(name + '.webp')
-  else:
-    (srcName, srcExt) = os.path.splitext(filename)
-    for size in sizes:
-      d = os.path.join(args.args.dst_dir, srcName + '-' + size + srcExt)
-      dstFullFilenames.append(d)
-      if filetype!='webp' and args.args.export_to_webp:
-        (name, _) = os.path.splitext(d)
-        dstFullFilenames.append(name + '.webp')
-
-  for name in dstFullFilenames:
-    if not os.path.isfile(name):
+  adds = args.args.add_name.split(',')
+  (srcName, srcExt) = os.path.splitext(filename)
+  for add in adds:
+    if not os.path.isfile(os.path.join(args.args.dst_dir, srcName + add + srcExt)):
       return True
+    if filetype!='webp' and args.args.export_to_webp:
+      if not os.path.isfile(os.path.join(args.args.dst_dir, srcName + add + '.webp')):
+        return True
   return False
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
@@ -57,18 +45,16 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   args.print(filename, True)
   image_org = Image.open(srcFullFilename)
   sizes = args.args.size.split(',')
+  adds = args.args.add_name.split(',')
 
   # from https://stackoverflow.com/questions/13872331/rotating-an-image-with-orientation-specified-in-exif-using-python-without-pil-in
   # if (args.args.rotate):
   #   image_org = ImageOps.exif_transpose(image_org)
   exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
 
-  for size in sizes:
-    if (len(sizes) == 1):
-      dstFullFilename = os.path.join(args.args.dst_dir, filename)
-    else:
-      dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-' + size + srcExt)
-    f = int(size) / max(image_org.width, image_org.height)
+  for index in range(sizes):
+    dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
+    f = int(sizes[index]) / max(image_org.width, image_org.height)
     if (f < 1):
       image = image_org.resize((int(image_org.width * f), int(image_org.height * f)))
     else:
@@ -83,11 +69,10 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
       png.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
 
     if filetype!='webp' and args.args.export_to_webp:
-      (name, _) = os.path.splitext(dstFullFilename)
-      dstFullFilename = name + '.webp'
+      dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
       webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
 
-  _hack(image_org, srcFullFilename, args, exif, epoch, filetype)
+  _hack(image_org, filename, args, exif, epoch, filetype)
 
 
 # TODO: noRafale
@@ -105,7 +90,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 # - slide aspect-ratio on screen >= 512px: 2/5, that is width=512 and height=205 ==> crop can be performed
 # 256 height
 
-def _hack(image_org, srcFullFilename, args, exif, epoch, filetype):
+def _hack(image_org, filename, args, exif, epoch, filetype):
   '''
   hack to crop images in special case for slides
   TODO: make this hack clean
@@ -116,9 +101,10 @@ def _hack(image_org, srcFullFilename, args, exif, epoch, filetype):
   '''
   width = image_org.width
   height = image_org.height
+  srcFullFilename = os.path.join(args.args.src_dir, filename)
 
   if (filetype == 'jpg') and (height == 256):   # this is a slide image
-    (srcName, _) = os.path.splitext(srcFullFilename)
+    (srcName, _) = os.path.splitext(filename)
 
     image = image_org
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + '-h256.jpg')
