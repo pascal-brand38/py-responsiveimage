@@ -34,7 +34,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
     filename_gif = dstName +'.gif'
     filename_webp = dstName +'.webp'
 
-    if (os.path.isfile(filename_gif)) and (os.path.isfile(filename_webp)):
+    if (not args.args.force) and (os.path.isfile(filename_gif)) and (os.path.isfile(filename_webp)):
       args.print(filename, False)
       return
 
@@ -46,12 +46,14 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
 
     subprocess.call([
       'ffmpeg',
+      '-y',
       '-i', srcFullFilename,
       '-vf', filters+',palettegen',
       '-y', palette ])
 
     subprocess.call([
       'ffmpeg',
+      '-y',
       '-i', srcFullFilename,
       '-i', palette,
       '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
@@ -63,6 +65,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
     # mp4 -> webp
     subprocess.call([
       'ffmpeg',
+      '-y',
       '-i', srcFullFilename,
       '-i', palette,
       '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
@@ -73,13 +76,14 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
 
   else:
 
-    if os.path.isfile(dstFullFilename):
+    if (not args.args.force) and (os.path.isfile(dstFullFilename)):
       args.print(filename, False)
       return
 
     args.print(filename, True)
     subprocess.call([
       'ffmpeg',
+      '-y',
       '-i', srcFullFilename,
       '-map_metadata', '0',   # copy video media properties - keep this option right after the -i option
       '-vf', 'scale=1024:-1',   # todo: scale

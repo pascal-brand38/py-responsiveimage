@@ -29,7 +29,7 @@ def test_mp4():
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
   resdir = tempfile.gettempdir()
-  __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir ])
+  __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--force' ])
 
   # this is not possible to compare binary files because of ffmpeg version
   # which is not constant over time and os
