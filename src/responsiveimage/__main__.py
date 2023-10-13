@@ -64,6 +64,10 @@ def _createParser():
                       help='list of added name. Default is nothing when a single transform, or size otherwise',
                       required=False,
                       default=None)
+  parser.add_argument('--crop',
+                      help='TODO',
+                      required=False,
+                      default=None)
   parser.add_argument('--force',
                       help='rewrite files',
                       required=False,

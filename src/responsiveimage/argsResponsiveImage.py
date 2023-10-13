@@ -30,6 +30,14 @@ def _check_arg_errors(argsparsed):
     if argsparsed.add_name.count(',') != len(transform)-1:
       raise RuntimeError("--size (or --height) and --add-name must have the same number of elements")
 
+  if argsparsed.crop is not None:
+    values = argsparsed.crop.split(',')
+    if len(values) != 4:
+      raise RuntimeError("--crop must be equal to a,b,c,d (4 values)")
+    for index, _ in enumerate(values):
+      values[index] = int(values[index])
+    argsparsed.crop = values
+
   return argsparsed
 
 class argsResponsiveImage():

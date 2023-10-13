@@ -30,9 +30,11 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
         return True
   return False
 
-def transform(image_org, value, what):
+def resize(image_org, value, what):
   '''
-  Transform original image
+  Transform original image, value being, depending on what:
+  - what==0 ==> value == max size
+  - what==1 ==> value == height
   '''
   if what == 0:
     f = int(value) / max(image_org.width, image_org.height)
@@ -42,6 +44,28 @@ def transform(image_org, value, what):
     return image_org.resize((int(image_org.width * f), int(image_org.height * f)))
   else:
     return image_org
+
+
+def crop(image_org, values):
+  '''
+  Crop image
+  '''
+  if values is None:
+    return image_org
+
+  if (values[0] > image_org.width):
+    return image_org
+  if (values[2] > image_org.width):
+    return image_org
+
+  if (values[1] > image_org.height):
+    return image_org
+  if (values[3] > image_org.height):
+    return image_org
+
+  return image_org.crop(values)
+
+
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
   '''
@@ -55,6 +79,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
   image_org = Image.open(srcFullFilename)
+  image_org = crop(image_org, args.args.crop)
 
   (srcName, srcExt) = os.path.splitext(filename)
 
@@ -73,7 +98,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
   for index, _ in enumerate(adds):
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
-    image = transform(image_org, transforms[index], what)
+    image = resize(image_org, transforms[index], what)
 
     if filetype == 'jpg':
       jpg.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
@@ -87,7 +112,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
       dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
       webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
 
-  _hack(image_org, filename, args, exif, epoch, filetype)
+  # _hack(image_org, filename, args, exif, epoch, filetype)
 
 
 # TODO: noRafale
