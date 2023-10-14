@@ -35,15 +35,15 @@ def _createParser():
   #                     default=False,
   #                     action='store_true')
   parser.add_argument('--src-dir',
-                      help='source directory',
+                      help='source directory. Default: /tmp/toreduce',
                       required=False,
                       default='/tmp/toreduce')
   parser.add_argument('--dst-dir',
-                      help='destination directory',
+                      help='destination directory. Default: /tmp/reduced',
                       required=False,
                       default='/tmp/reduced')
   parser.add_argument('--size',
-                      help='list of sizes, separated by commas, of different scale. Ex: 1024,512',
+                      help='list of sizes, separated by commas, of different scale. Ex: 1024,512. Default: 1920px if --height not set',
                       required=False,
                       default=None)
   parser.add_argument('--height',

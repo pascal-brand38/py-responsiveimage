@@ -79,16 +79,19 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
     if (not args.args.force) and (os.path.isfile(dstFullFilename)):
       args.print(filename, False)
       return
-
     args.print(filename, True)
+
+    # -vf option: https://trac.ffmpeg.org/wiki/Scaling
+    # pad: cf. https://stackoverflow.com/questions/20847674/ffmpeg-libx264-height-not-divisible-by-2
     subprocess.call([
       'ffmpeg',
       '-y',
       '-i', srcFullFilename,
       '-map_metadata', '0',   # copy video media properties - keep this option right after the -i option
-      '-vf', 'scale=1024:-1',   # todo: scale
+      '-vf', 'scale=w=\'min(1024,iw)\':h=\'min(1024,ih)\':force_original_aspect_ratio=decrease,pad=ceil(iw/2)*2:ceil(ih/2)*2',   # todo: scale
       dstFullFilename,
-      '-loglevel', 'quiet'
+      '-loglevel', 'repeat+level+verbose',
+      # '-loglevel', 'quiet'
       ])
 
     # update timestamp

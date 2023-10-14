@@ -68,7 +68,7 @@ _____________________
 ## 1.1.0
 
 Following capabilities are added:
-* ```--heights```
+* ```--height```
 * ```--add-name```
 * ```--crop```
 * ```--force```
