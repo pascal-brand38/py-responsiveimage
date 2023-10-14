@@ -25,12 +25,12 @@ def _createParser():
      )
 
   # parser.add_argument('--rotate',
-  #                     help='TODO',
+  #                     help='',
   #                     required=False,
   #                     default=False,
   #                     action='store_true')
   # parser.add_argument('--no-rafale',
-  #                     help='TODO',
+  #                     help='',
   #                     required=False,
   #                     default=False,
   #                     action='store_true')
@@ -65,7 +65,7 @@ def _createParser():
                       required=False,
                       default=None)
   parser.add_argument('--crop',
-                      help='TODO',
+                      help='x1,y1,x2,y2: crop the original image before rescaling',
                       required=False,
                       default=None)
   parser.add_argument('--force',

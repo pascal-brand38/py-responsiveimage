@@ -12,7 +12,9 @@ from responsiveimage import __main__
 
 def check_file(refdir, resdir, file, ext):
   """
-  TODO
+  check if both file are almost the same:
+  - extension are the same
+  - size are the same, up to 25%
   """
   res = resdir + '/' + file
   ref = refdir + '/' + file
