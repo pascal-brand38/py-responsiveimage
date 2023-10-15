@@ -6,6 +6,7 @@ create responsive images, based on list of sizes
 '''
 
 import os
+from typing import List, Union
 from PIL import Image     # python -m pip install --upgrade pillow
 # from PIL import ImageOps
 
@@ -15,7 +16,7 @@ from . import webp
 from . import png
 from . import jpg
 
-def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
+def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str) -> bool:
   '''
   return True if one of the output is missing
   In that case, further processing is skipped
@@ -30,7 +31,7 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
         return True
   return False
 
-def resize(image_org, value, what):
+def resize(image_org: Image.Image, value: str, what: int) -> Image.Image:
   '''
   Transform original image, value being, depending on what:
   - what==0 ==> value == max size
@@ -46,7 +47,7 @@ def resize(image_org, value, what):
     return image_org
 
 
-def crop(image_org, values):
+def crop(image_org:Image.Image, values: Union[None, List[int]]) -> Image.Image:
   '''
   Crop image
   '''
@@ -63,11 +64,11 @@ def crop(image_org, values):
   if (values[3] > image_org.height):
     return image_org
 
-  return image_org.crop(values)
+  return image_org.crop((values[0], values[1], values[2], values[3]))
 
 
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str):
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str) -> None:
   '''
   create responsive version of the images
   '''

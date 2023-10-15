@@ -10,7 +10,7 @@ import shutil
 import filecmp
 from . import argsResponsiveImage
 
-def _copy_file(filename_src:str, filename_dst:str):
+def _copy_file(filename_src:str, filename_dst:str) -> None:
   '''
   copy the file filename_src to filename_dst (full file name)
   '''
@@ -22,7 +22,7 @@ def _copy_file(filename_src:str, filename_dst:str):
       print('   === cannot copy ' + filename_src + ' to ' + filename_dst)
 
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype: str):
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype: str) -> None:
   '''
   get the responsive version of the image by copying it only
   used for gif and svg

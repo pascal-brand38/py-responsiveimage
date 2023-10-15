@@ -8,13 +8,14 @@ Main function of responsiveimage package
 import argparse
 import os
 import sys
+from typing import List
 import filetype
 from . import copy_image
 from . import pil_image
 from . import mp4
 from . import argsResponsiveImage
 
-def _createParser():
+def _createParser() -> argparse.ArgumentParser:
   '''
   parse commandline options
   '''
@@ -77,7 +78,7 @@ def _createParser():
   return parser
 
 
-def main(cmdargs):
+def main(cmdargs: List[str]) -> None:
   '''
   main function of python package responsiveimage
   '''

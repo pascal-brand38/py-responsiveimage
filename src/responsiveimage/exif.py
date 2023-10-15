@@ -9,12 +9,14 @@ exif and file utility functions:
 '''
 
 import json
+from typing import Union, Tuple
 from datetime import datetime
 import shutil
 import os
+from PIL import Image   # python -m pip install --upgrade pillow
 from PIL import ExifTags   # python -m pip install --upgrade pillow
 
-def printExifTags(exif):
+def printExifTags(exif: Image.Exif) -> None:
   '''
   print exif tags
   '''
@@ -30,7 +32,7 @@ def printExifTags(exif):
         print(f'{key}:{ExifTags.TAGS[key]}:{val}')
 
 
-def getExif(image, fullFilename, ext:str):
+def getExif(image: Image.Image, fullFilename:str, ext:str) -> Tuple[Union[Image.Exif, None], float]:
   '''
   get exif data AND epoch time of creation of the file
   it may take advantage of .json file, as used by google photo, when the
@@ -62,7 +64,7 @@ def getExif(image, fullFilename, ext:str):
 
   if not dateTimeOriginal:
     # no acquisition date in exif nor png metadata
-    # check if a json file exist (from a google photo for example)
+    # check if a json file exists (from a google photo for example)
     try:
       with open(fullFilename + '.json', encoding='utf-8') as json_file:
         jsonData = json.load(json_file)
@@ -82,11 +84,11 @@ def getExif(image, fullFilename, ext:str):
   return exif, epoch
 
 
-def updateFilestat(srcFullFilename, dstFullFilename, epoch):
+def updateFilestat(srcFullFilename: str, dstFullFilename: str, epoch: Union[float, None]) -> None:
   '''
   update stat file of dstFullFilename given srcFullFilename, as well as the
   epoch time when not zero
   '''
   shutil.copystat(srcFullFilename, dstFullFilename)
-  if (epoch != 0):
+  if (epoch is not None) and (epoch != 0):
     os.utime(dstFullFilename, (epoch, epoch))

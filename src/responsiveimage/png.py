@@ -6,10 +6,18 @@ webp utility functions:
 - save
 '''
 
+from typing import Union
+from PIL import Image
 from . import argsResponsiveImage
 from . import exif as getexif
 
-def save(image, srcFullFilename, dstFullFilename, exif, epoch, args: argsResponsiveImage.argsResponsiveImage):
+def save(
+    image:Image.Image,
+    srcFullFilename:str,
+    dstFullFilename:str,
+    exif: Union[Image.Exif, None],
+    epoch:float,
+    args: argsResponsiveImage.argsResponsiveImage) -> None:
   '''
   save image as png format, as name dstFullFilename
   - use exif is not None

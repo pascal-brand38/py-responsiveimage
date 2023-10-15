@@ -5,7 +5,10 @@ Copyright (c) 2023 Pascal Brand
 Extends argparse
 '''
 
-def _check_arg_errors(argsparsed):
+import argparse
+
+
+def _check_arg_errors(argsparsed: argparse.Namespace) -> argparse.Namespace:
   # update argsparsed, and check for errors
   if (argsparsed.size is not None) and (argsparsed.height is not None):
     raise RuntimeError("--size and --height cannot be both set")
@@ -44,7 +47,7 @@ class argsResponsiveImage():
   '''
   extends argparse
   '''
-  def __init__(self, argsparsed, nb):
+  def __init__(self, argsparsed: argparse.Namespace, nb: int) -> None:
     argsparsed = _check_arg_errors(argsparsed)
 
     self.args = argsparsed
@@ -60,14 +63,14 @@ class argsResponsiveImage():
       }
     }
 
-  def inc(self):
+  def inc(self) -> None:
     '''
     increment the number of processed images
     '''
     if self.nb is not None:
       self.nb = self.nb + 1
 
-  def print(self, filename: str, processed: bool):
+  def print(self, filename: str, processed: bool) -> None:
     '''
     verbose the number of processed images
     '''

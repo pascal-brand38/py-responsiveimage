@@ -65,6 +65,9 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
+# Next
+* Fix mp4: no upscale, along max size.
+
 ## 1.1.0
 
 Following capabilities are added:

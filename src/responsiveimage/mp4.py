@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 from . import argsResponsiveImage
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename):
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> None:
   '''
   process mp4 file filename (only the filename, without src_dir)
 
