@@ -105,7 +105,7 @@ def main(cmdargs: List[str]) -> None:
     # See kind.EXTENSION for supported extensions
     if extension in [ 'jpg', 'png', 'webp' ]:
       pil_image.responsive(args, filename, extension)
-    elif extension in [ 'mp4' ]:
+    elif extension in [ 'mp4', 'mts' ]:
       mp4.responsive(args, filename)
     elif extension in [ 'gif', 'svg' ]:
       copy_image.responsive(args, filename, extension)
