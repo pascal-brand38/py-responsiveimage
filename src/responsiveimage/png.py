@@ -25,7 +25,7 @@ def save(
   - srcFullFilename and epoch are used to keep modification dates
   '''
   if exif:
-    image.save(dstFullFilename, optimize=True, exif=exif)
+    image.save(dstFullFilename, optimize=True, format='PNG', exif=exif)
   else:
-    image.save(dstFullFilename, optimize=True)
+    image.save(dstFullFilename, optimize=True, format='PNG')
   getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)

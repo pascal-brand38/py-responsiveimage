@@ -24,5 +24,5 @@ def save(
   - srcFullFilename and epoch are used to keep modification dates
   '''
   parameters = args.parameters['webp']
-  image.save(dstFullFilename, method=6, quality=parameters['quality'])
+  image.save(dstFullFilename, method=6, quality=parameters['quality'], format='WebP')
   getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)

@@ -26,7 +26,7 @@ def save(
   '''
   parameters = args.parameters['jpg']
   if exif:
-    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'], exif=exif)
+    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'], format='JPEG', exif=exif)
   else:
-    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'])
+    image.save(dstFullFilename, quality=parameters['quality'], progressive=parameters['progressive'], optimize=True, subsampling=parameters['subsampling'], format='JPEG')
   getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)
