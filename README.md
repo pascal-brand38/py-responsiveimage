@@ -52,7 +52,7 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
   Option ```--add-name <name1,name2...>```is used to modify the suffix, in ```name1``` , ```name2```.
   Note that the numbers of sizes or heights must be the same as the one of add-name if provided
 
-  As an example, using ```--size 1024,512 --add-name _big,_small```, an image ```img.jpg``` will be rescaled with 1024px and named ```img_big_.jpg```, and another one rescaled at 512px and named ```img_small_.jpg```
+  As an example, using ```--size 1024,512 --add-name _big,_small```, an image ```img.jpg``` will be rescaled with 1024px and named ```img_big.jpg```, and another one rescaled at 512px and named ```img_small.jpg```
 
 * ```--mp4-as-gif```: from a mp4 file, the gif and the webp animated versions are created, using ```ffmpeg```
 
