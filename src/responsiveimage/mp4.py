@@ -89,6 +89,9 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> 
       '-i', srcFullFilename,
       '-map_metadata', '0',   # copy video media properties - keep this option right after the -i option
       '-vf', 'scale=w=\'min(1024,iw)\':h=\'min(1024,ih)\':force_original_aspect_ratio=decrease,pad=ceil(iw/2)*2:ceil(ih/2)*2',   # todo: scale
+      '-vcodec', 'libx264',     # https://stackoverflow.com/questions/3561715/using-ffmpeg-to-encode-a-high-quality-video
+      '-crf', '18',
+      '-preset', 'veryslow',
       dstFullFilename,
       '-loglevel', 'repeat+level+verbose',
       # '-loglevel', 'quiet'
