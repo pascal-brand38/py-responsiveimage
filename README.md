@@ -58,6 +58,12 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 
 * ```--crop <x1,y1,x2,y2>``` crops the original image using ```(x1,y1)``` as the top-left point (x being the horizontal position in px), and ```(x2,y2)``` being the bottom-right point.
 
+* ```--recursive``` to scan recursively the source directory. The directory tree is kept in destination
+
+* ```--format <f1,f2>``` to used to only process files of provided format. You can
+  for example process only jpg and png to exclude videos.
+  The default value is ```jpg,png,webp,mp4,mts,gif,svg```
+
 * ```--force```: recreate the scaled versions of the images, even when they exist.
 
 <br>
