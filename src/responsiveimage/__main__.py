@@ -56,6 +56,11 @@ def _createParser() -> argparse.ArgumentParser:
                       required=False,
                       default=False,
                       action='store_true')
+  parser.add_argument('--recursive',
+                      help='recursive into subdirectories',
+                      required=False,
+                      default=False,
+                      action='store_true')
   parser.add_argument('--mp4-as-gif',
                       help='mp4 saved as .gif and .webo',
                       required=False,
@@ -81,23 +86,29 @@ def _createParser() -> argparse.ArgumentParser:
 
   return parser
 
-
-def main(cmdargs: List[str]) -> object:
+def extract(args: argsResponsiveImage.argsResponsiveImage) -> object:
   '''
   main function of python package responsiveimage
   '''
-  parser = _createParser()
-  args = argsResponsiveImage.argsResponsiveImage(parser.parse_args(cmdargs), 0)
-
   extensionSkipped = set()
   fileFailed = []
+
+  savedSrcDir = args.args.src_dir
+  savedDstDir = args.args.dst_dir
 
   if not os.path.isdir(args.args.dst_dir):
     os.mkdir(args.args.dst_dir)
 
   for filename in os.listdir(args.args.src_dir):
     if not os.path.isfile(os.path.join(args.args.src_dir, filename)):
-      print('Skip directory ' + filename)
+      if (args.args.recursive):
+        args.args.src_dir = os.path.join(args.args.src_dir, filename)
+        args.args.dst_dir = os.path.join(args.args.dst_dir, filename)
+        es, ff = extract(args)
+        extensionSkipped = extensionSkipped.union(es)
+        fileFailed.append(ff)
+        args.args.src_dir = savedSrcDir
+        args.args.dst_dir = savedDstDir
       continue
 
     kind = filetype.guess(args.args.src_dir + '/' + filename)
@@ -107,7 +118,6 @@ def main(cmdargs: List[str]) -> object:
         extension = extension[1:].lower()
     else:
       extension = kind.extension
-
 
     # See kind.EXTENSION for supported extensions
     if extension not in args.args.format:
@@ -128,8 +138,17 @@ def main(cmdargs: List[str]) -> object:
         copy_image.responsive(args, filename, extension)
         fileFailed.append(filename)
 
-
   return extensionSkipped, fileFailed
+
+
+def main(cmdargs: List[str]) -> object:
+  '''
+  main function of python package responsiveimage
+  '''
+  parser = _createParser()
+  args = argsResponsiveImage.argsResponsiveImage(parser.parse_args(cmdargs), 0)
+  return extract(args)
+
 
 if __name__ == "__main__":
   extensionSkipped, fileFailed = main(sys.argv[1:])
