@@ -41,6 +41,11 @@ def _check_arg_errors(argsparsed: argparse.Namespace) -> argparse.Namespace:
       values[index] = int(values[index])
     argsparsed.crop = values
 
+  values = argsparsed.format.split(',')
+  for index, _ in enumerate(values):
+    values[index] = values[index].lower()
+  argsparsed.format = values
+
   return argsparsed
 
 class argsResponsiveImage():

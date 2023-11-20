@@ -65,6 +65,10 @@ def _createParser() -> argparse.ArgumentParser:
                       help='list of added name. Default is nothing when a single transform, or size otherwise',
                       required=False,
                       default=None)
+  parser.add_argument('--format',
+                      help='list of formats, separated by commas. Default: jpg,png,webp,mp4,mts,gif,svg',
+                      required=False,
+                      default='jpg,png,webp,mp4,mts,gif,svg')
   parser.add_argument('--crop',
                       help='x1,y1,x2,y2: crop the original image before rescaling',
                       required=False,
@@ -78,12 +82,15 @@ def _createParser() -> argparse.ArgumentParser:
   return parser
 
 
-def main(cmdargs: List[str]) -> None:
+def main(cmdargs: List[str]) -> object:
   '''
   main function of python package responsiveimage
   '''
   parser = _createParser()
   args = argsResponsiveImage.argsResponsiveImage(parser.parse_args(cmdargs), 0)
+
+  extensionSkipped = set()
+  fileFailed = []
 
   if not os.path.isdir(args.args.dst_dir):
     os.mkdir(args.args.dst_dir)
@@ -103,14 +110,31 @@ def main(cmdargs: List[str]) -> None:
 
 
     # See kind.EXTENSION for supported extensions
-    if extension in [ 'jpg', 'png', 'webp' ]:
-      pil_image.responsive(args, filename, extension)
-    elif extension in [ 'mp4', 'mts' ]:
-      mp4.responsive(args, filename)
-    elif extension in [ 'gif', 'svg' ]:
-      copy_image.responsive(args, filename, extension)
+    if extension not in args.args.format:
+      extensionSkipped.add(extension)
     else:
-      print('File extension ' + extension + ' not supported - file ' + filename)
+      try:
+        if extension in [ 'jpg', 'png', 'webp' ]:
+          pil_image.responsive(args, filename, extension)
+        elif extension in [ 'mp4', 'mts' ]:
+          mp4.responsive(args, filename)
+        elif extension in [ 'gif', 'svg' ]:
+          copy_image.responsive(args, filename, extension)
+        else:
+          print('File extension ' + extension + ' not supported - file ' + filename)
+          extensionSkipped.add(extension)
+      except:
+        print('File crash: ' + filename)
+        copy_image.responsive(args, filename, extension)
+        fileFailed.append(filename)
+
+
+  return extensionSkipped, fileFailed
 
 if __name__ == "__main__":
-  main(sys.argv[1:])
+  extensionSkipped, fileFailed = main(sys.argv[1:])
+  print('Skipped extension: ', extensionSkipped)
+  print('Files Failed: ', fileFailed)
+
+
+# TODO: Skipped extension:  {'pdf', 'xls', 'zip', 'avi', 'mts', 'wmv', 'ini', 'mov'}
