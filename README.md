@@ -7,8 +7,9 @@
 
 **responsiveimage** is a python package aimed at building responsive version of images.
 
-Supported image format are webp, jpg, png, gif and svg.
-
+Supported formats are:
+* image: webp, jpg, png, gif and svg
+* video: mp4, mts, avi, wmv, mov
 <br>
 
 ____________
@@ -62,7 +63,7 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 
 * ```--format <f1,f2>``` to used to only process files of provided format. You can
   for example process only jpg and png to exclude videos.
-  The default value is ```jpg,png,webp,mp4,mts,gif,svg```
+  The default value is ```jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov```
 
 * ```--force```: recreate the scaled versions of the images, even when they exist.
 
@@ -70,6 +71,13 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 
 _____________________
 # Releases
+
+## 1.2.0
+* Supported formats:
+  webp, jpg, png, gif and svg, mp4, mts, avi, wmv, mov
+* New options:
+  * --format
+  * --recursive
 
 ## 1.1.1
 * Fix mp4: no upscale, along max size.

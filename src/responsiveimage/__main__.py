@@ -8,7 +8,7 @@ Main function of responsiveimage package
 import argparse
 import os
 import sys
-from typing import List
+from typing import List, Tuple
 import filetype
 from . import copy_image
 from . import pil_image
@@ -71,9 +71,9 @@ def _createParser() -> argparse.ArgumentParser:
                       required=False,
                       default=None)
   parser.add_argument('--format',
-                      help='list of formats, separated by commas. Default: jpg,png,webp,mp4,mts,gif,svg',
+                      help='list of formats, separated by commas. Default: jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov',
                       required=False,
-                      default='jpg,png,webp,mp4,mts,gif,svg')
+                      default='jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov')
   parser.add_argument('--crop',
                       help='x1,y1,x2,y2: crop the original image before rescaling',
                       required=False,
@@ -86,7 +86,7 @@ def _createParser() -> argparse.ArgumentParser:
 
   return parser
 
-def extract(args: argsResponsiveImage.argsResponsiveImage) -> object:
+def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[str]]:
   '''
   main function of python package responsiveimage
   '''
@@ -126,7 +126,7 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> object:
       try:
         if extension in [ 'jpg', 'png', 'webp' ]:
           pil_image.responsive(args, filename, extension)
-        elif extension in [ 'mp4', 'mts' ]:
+        elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
           mp4.responsive(args, filename)
         elif extension in [ 'gif', 'svg' ]:
           copy_image.responsive(args, filename, extension)
@@ -141,7 +141,7 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> object:
   return extensionSkipped, fileFailed
 
 
-def main(cmdargs: List[str]) -> object:
+def main(cmdargs: List[str]) -> Tuple[set, List[str]]:
   '''
   main function of python package responsiveimage
   '''
@@ -156,4 +156,4 @@ if __name__ == "__main__":
   print('Files Failed: ', fileFailed)
 
 
-# TODO: Skipped extension:  {'pdf', 'xls', 'zip', 'avi', 'mts', 'wmv', 'ini', 'mov'}
+# TODO: Skipped extension:  {'xls', 'zip', 'ini'}
