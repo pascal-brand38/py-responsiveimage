@@ -57,10 +57,13 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Lint with pylint
       # C0103: Variable name naming style
+      # C0200: Consider using enumerate instead of iterating with range and len
       # C0301: line too long
       # C0325: Unnecessary parens after 'if' keyword
       # R0912: Too many branches
       # R0913: Too many arguments
+      # R0914: Too many local variables
+      # R0915: Too many statements
       # R1705: Unnecessary "else" after "return"
       # W0511: todo
       # W0621: Redefining name 'extensionSkipped' from outer scope
@@ -68,7 +71,7 @@ jobs:
       # W0702: No exception type(s) specified
       # W0718: Catching too general exception
       run: |
-        pylint --indent-string='  ' --disable C0103,C0301,C0325,R0912,R0913,R1705,W0511,W0621,W0613,W0702,W0718 $(git ls-files '*.py')
+        pylint --indent-string='  ' --disable C0103,C0200,C0301,C0325,R0912,R0913,R0914,R0915,R1705,W0511,W0621,W0613,W0702,W0718 $(git ls-files '*.py')
     - name: Test with pytest
       run: |
         pytest tests/png.py tests/export_to_webp.py tests/mp4.py tests/crop.py

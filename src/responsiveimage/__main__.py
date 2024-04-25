@@ -8,6 +8,8 @@ Main function of responsiveimage package
 import argparse
 import os
 import sys
+import multiprocessing
+import itertools
 from typing import List, Tuple
 import filetype
 from . import copy_image
@@ -106,9 +108,6 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
   copy_filename = []
   copy_extension = []
 
-  # TODO: parallel multiprocessing as https://superfastpython.com/multiprocessing-pool-python/#Multiprocessing_Pool_Example
-  # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments
-  # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments/5443941#5443941
   print('Inspecting ' + args.args.src_dir)
   filenames = os.listdir(args.args.src_dir)
   print('Computing extensions of ' + str(len(filenames)) + ' files')
@@ -156,10 +155,20 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
   video_nb = list(range(args.nb, args.nb+len(video_filename)))
   args.add(len(video_filename))
 
-  for i in range(len(pil_image_filename)):
-    pil_image.responsive(args, pil_image_filename[i], pil_image_extension[i], pil_image_nb[i])
-  for i in range(len(copy_filename)):
-    copy_image.responsive(args, copy_filename[i], copy_extension[i], copy_nb[i])
+  # multiprocessing of images
+  #    https://superfastpython.com/multiprocessing-pool-python/#Multiprocessing_Pool_Example
+  #    https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments/5443941#5443941
+  # for i in range(len(pil_image_filename)):
+  #   pil_image.responsive(args, pil_image_filename[i], pil_image_extension[i], pil_image_nb[i])
+  with multiprocessing.Pool() as pool:
+    pool.starmap(pil_image.responsive, zip(itertools.repeat(args), pil_image_filename, pil_image_extension, pil_image_nb))
+
+  # for i in range(len(copy_filename)):
+  #   copy_image.responsive(args, copy_filename[i], copy_extension[i], copy_nb[i])
+  with multiprocessing.Pool() as pool:
+    pool.starmap(copy_image.responsive, zip(itertools.repeat(args), copy_filename, copy_extension, copy_nb))
+
+  # no multiprocessing on videos as ffmpeg is parallel itself
   for i in range(len(video_filename)):
     mp4.responsive(args, video_filename[i], video_nb[i])
 
@@ -179,24 +188,3 @@ if __name__ == "__main__":
   extensionSkipped, fileFailed = main(sys.argv[1:])
   print('Skipped extension: ', extensionSkipped)
   print('Files Failed: ', fileFailed)
-
-
-# TODO: Skipped extension:  {'xls', 'zip', 'ini'}
-
-
-'''
-      try:
-        if extension in [ 'jpg', 'png', 'webp' ]:
-          pil_image.responsive(args, filename, extension)
-        elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
-          mp4.responsive(args, filename)
-        elif extension in [ 'gif', 'svg' ]:
-          copy_image.responsive(args, filename, extension)
-        else:
-          print('File extension ' + extension + ' not supported - file ' + filename)
-          extensionSkipped.add(extension)
-      except:
-        print('File crash: ' + filename)
-        copy_image.responsive(args, filename, extension)
-        fileFailed.append(filename)
-'''
