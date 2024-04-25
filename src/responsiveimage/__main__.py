@@ -99,7 +99,20 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
   if not os.path.isdir(args.args.dst_dir):
     os.mkdir(args.args.dst_dir)
 
-  for filename in os.listdir(args.args.src_dir):
+  pil_image_filename = []
+  pil_image_extension = []
+  video_filename = []
+  video_extension = []
+  copy_filename = []
+  copy_extension = []
+
+  # TODO: parallel multiprocessing as https://superfastpython.com/multiprocessing-pool-python/#Multiprocessing_Pool_Example
+  # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments
+  # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments/5443941#5443941
+  print('Inspecting ' + args.args.src_dir)
+  filenames = os.listdir(args.args.src_dir)
+  print('Computing extensions of ' + str(len(filenames)) + ' files')
+  for filename in filenames:
     if not os.path.isfile(os.path.join(args.args.src_dir, filename)):
       if (args.args.recursive):
         args.args.src_dir = os.path.join(args.args.src_dir, filename)
@@ -123,20 +136,32 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
     if extension not in args.args.format:
       extensionSkipped.add(extension)
     else:
-      try:
-        if extension in [ 'jpg', 'png', 'webp' ]:
-          pil_image.responsive(args, filename, extension)
-        elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
-          mp4.responsive(args, filename)
-        elif extension in [ 'gif', 'svg' ]:
-          copy_image.responsive(args, filename, extension)
-        else:
-          print('File extension ' + extension + ' not supported - file ' + filename)
-          extensionSkipped.add(extension)
-      except:
-        print('File crash: ' + filename)
-        copy_image.responsive(args, filename, extension)
-        fileFailed.append(filename)
+      if extension in [ 'jpg', 'png', 'webp' ]:
+        pil_image_filename.append(filename)
+        pil_image_extension.append(extension)
+      elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
+        video_filename.append(filename)
+        video_extension.append(extension)
+      elif extension in [ 'gif', 'svg' ]:
+        copy_filename.append(filename)
+        copy_extension.append(extension)
+      else:
+        print('File extension ' + extension + ' not supported - file ' + filename)
+        extensionSkipped.add(extension)
+
+  pil_image_nb = list(range(args.nb, args.nb+len(pil_image_filename)))
+  args.add(len(pil_image_filename))
+  copy_nb = list(range(args.nb, args.nb+len(copy_filename)))
+  args.add(len(copy_filename))
+  video_nb = list(range(args.nb, args.nb+len(video_filename)))
+  args.add(len(video_filename))
+
+  for i in range(len(pil_image_filename)):
+    pil_image.responsive(args, pil_image_filename[i], pil_image_extension[i], pil_image_nb[i])
+  for i in range(len(copy_filename)):
+    copy_image.responsive(args, copy_filename[i], copy_extension[i], copy_nb[i])
+  for i in range(len(video_filename)):
+    mp4.responsive(args, video_filename[i], video_nb[i])
 
   return extensionSkipped, fileFailed
 
@@ -157,3 +182,21 @@ if __name__ == "__main__":
 
 
 # TODO: Skipped extension:  {'xls', 'zip', 'ini'}
+
+
+'''
+      try:
+        if extension in [ 'jpg', 'png', 'webp' ]:
+          pil_image.responsive(args, filename, extension)
+        elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
+          mp4.responsive(args, filename)
+        elif extension in [ 'gif', 'svg' ]:
+          copy_image.responsive(args, filename, extension)
+        else:
+          print('File extension ' + extension + ' not supported - file ' + filename)
+          extensionSkipped.add(extension)
+      except:
+        print('File crash: ' + filename)
+        copy_image.responsive(args, filename, extension)
+        fileFailed.append(filename)
+'''

@@ -68,19 +68,17 @@ class argsResponsiveImage():
       }
     }
 
-  def inc(self) -> None:
+  def add(self, nb) -> None:
     '''
     increment the number of processed images
     '''
-    if self.nb is not None:
-      self.nb = self.nb + 1
+    self.nb = self.nb + nb
 
-  def print(self, filename: str, processed: bool) -> None:
+  def print(self, filename: str, processed: bool, nb: int) -> None:
     '''
     verbose the number of processed images
     '''
-    if self.nb is not None:
-      if (processed):
-        print('  + ' + str(self.nb) + ' ' + filename)
-      else:
-        print('  - ' + str(self.nb) + ' ' + filename)
+    if (processed):
+      print('  + ' + str(nb) + ' ' + filename)
+    else:
+      print('  - ' + str(nb) + ' ' + filename)

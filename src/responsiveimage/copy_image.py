@@ -22,15 +22,14 @@ def _copy_file(filename_src:str, filename_dst:str) -> None:
       print('   === cannot copy ' + filename_src + ' to ' + filename_dst)
 
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype: str) -> None:
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype: str, nb: int) -> None:
   '''
   get the responsive version of the image by copying it only
   used for gif and svg
   '''
-  args.inc()
   if (not args.args.force) and (os.path.isfile(os.path.join(args.args.dst_dir, filename))):
-    args.print(filename, False)
+    args.print(filename, False, nb)
     return
 
-  args.print(filename, True)
+  args.print(filename, True, nb)
   _copy_file(os.path.join(args.args.src_dir, filename), os.path.join(args.args.dst_dir, filename))

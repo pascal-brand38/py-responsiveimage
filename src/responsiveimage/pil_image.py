@@ -68,15 +68,14 @@ def crop(image_org:Image.Image, values: Union[None, List[int]]) -> Image.Image:
 
 
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str) -> None:
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str, nb: int) -> None:
   '''
   create responsive version of the images
   '''
-  args.inc()
   if (not args.args.force) and (not missingOutput(args, filename, filetype)):
-    args.print(filename, False)
+    args.print(filename, False, nb)
     return
-  args.print(filename, True)
+  args.print(filename, True, nb)
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
   image_org = Image.open(srcFullFilename)

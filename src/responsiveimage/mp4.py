@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 from . import argsResponsiveImage
 
-def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> None:
+def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb: int) -> None:
   '''
   process mp4 file filename (only the filename, without src_dir)
 
@@ -22,8 +22,6 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> 
   otherwise
   - rescale mp4 (TODO: right now 1024)
   '''
-
-  args.inc()
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
   dstFullFilename = os.path.join(args.args.dst_dir, filename)
@@ -35,10 +33,10 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> 
     filename_webp = dstName +'.webp'
 
     if (not args.args.force) and (os.path.isfile(filename_gif)) and (os.path.isfile(filename_webp)):
-      args.print(filename, False)
+      args.print(filename, False, nb)
       return
 
-    args.print(filename, True)
+    args.print(filename, True, nb)
 
     # mp4 -> gif: https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality
     palette = tempfile.gettempdir() + '/palette.png'
@@ -77,9 +75,9 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str) -> 
   else:
 
     if (not args.args.force) and (os.path.isfile(dstFullFilename)):
-      args.print(filename, False)
+      args.print(filename, False, nb)
       return
-    args.print(filename, True)
+    args.print(filename, True, nb)
 
     # -vf option: https://trac.ffmpeg.org/wiki/Scaling
     # pad: cf. https://stackoverflow.com/questions/20847674/ffmpeg-libx264-height-not-divisible-by-2
