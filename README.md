@@ -72,6 +72,9 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
+## 1.3.0
+* Multiprocessing on images
+
 ## 1.2.0
 * Supported formats:
   webp, jpg, png, gif and svg, mp4, mts, avi, wmv, mov
