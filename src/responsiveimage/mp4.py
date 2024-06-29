@@ -38,10 +38,8 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb:
     adds = args.args.add_name.split(',')
     if args.args.size is not None:
       transforms = args.args.size.split(',')
-      what = 0
     else:
       transforms = args.args.height.split(',')
-      what = 1
 
     for index, _ in enumerate(adds):
       filename_gif = os.path.join(args.args.dst_dir, srcName + adds[index] + '.gif')
