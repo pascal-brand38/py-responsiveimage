@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import tempfile
 from . import argsResponsiveImage
+from . import misc
 
 def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb: int) -> None:
   '''
@@ -27,50 +28,64 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb:
   dstFullFilename = os.path.join(args.args.dst_dir, filename)
 
   if args.args.mp4_as_gif:
-    (dstName, _) = os.path.splitext(dstFullFilename)
-
-    filename_gif = dstName +'.gif'
-    filename_webp = dstName +'.webp'
-
-    if (not args.args.force) and (os.path.isfile(filename_gif)) and (os.path.isfile(filename_webp)):
+    if (not args.args.force) and (not misc.missingOutput(args, filename, 'gif')):
       args.print(filename, False, nb)
       return
-
     args.print(filename, True, nb)
 
-    # mp4 -> gif: https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality
-    palette = tempfile.gettempdir() + '/palette.png'
-    filters='fps=2,scale=-1:-1:flags=lanczos'
+    (srcName, _) = os.path.splitext(filename)
 
-    subprocess.call([
-      'ffmpeg',
-      '-y',
-      '-i', srcFullFilename,
-      '-vf', filters+',palettegen',
-      '-y', palette ])
+    adds = args.args.add_name.split(',')
+    if args.args.size is not None:
+      transforms = args.args.size.split(',')
+      what = 0
+    else:
+      transforms = args.args.height.split(',')
+      what = 1
 
-    subprocess.call([
-      'ffmpeg',
-      '-y',
-      '-i', srcFullFilename,
-      '-i', palette,
-      '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
-      '-y',
-      '-loop', '0',
-      '-compression_level', '6',
-      filename_gif])
+    for index, _ in enumerate(adds):
+      filename_gif = os.path.join(args.args.dst_dir, srcName + adds[index] + '.gif')
+      filename_webp = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
+      # image = resize(image_org, transforms[index], what)
+      # scale = "scale=w=" + transforms[index] + ":h=" + transforms[index] + ":force_original_aspect_ratio=decrease"
+      scale = "scale=w='min(" + transforms[index] + ",iw)':h='min(" + transforms[index] + ",ih)':force_original_aspect_ratio=decrease"
 
-    # mp4 -> webp
-    subprocess.call([
-      'ffmpeg',
-      '-y',
-      '-i', srcFullFilename,
-      '-i', palette,
-      '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
-      '-y',
-      '-loop', '0',
-      '-compression_level', '6',
-      filename_webp])
+      # mp4 -> gif: https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality
+      palette = tempfile.gettempdir() + '/palette.png'
+      filters='fps=2,' + scale + ':flags=lanczos'
+
+      subprocess.call([
+        'ffmpeg',
+        '-i', srcFullFilename,
+        '-vf', filters+',palettegen',
+        '-y',
+        '-loglevel', 'error',
+        palette ])
+
+      subprocess.call([
+        'ffmpeg',
+        '-y',
+        '-i', srcFullFilename,
+        '-i', palette,
+        '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
+        '-y',
+        '-loop', '0',
+        '-compression_level', '6',
+        '-loglevel', 'error',
+        filename_gif])
+
+      # mp4 -> webp
+      subprocess.call([
+        'ffmpeg',
+        '-y',
+        '-i', srcFullFilename,
+        '-i', palette,
+        '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
+        '-y',
+        '-loop', '0',
+        '-compression_level', '6',
+        '-loglevel', 'error',
+        filename_webp])
 
   else:
 
@@ -91,7 +106,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb:
       '-crf', '18',
       '-preset', 'veryslow',
       dstFullFilename,
-      '-loglevel', 'repeat+level+verbose',
+      '-loglevel', 'error',
       # '-loglevel', 'quiet'
       ])
 

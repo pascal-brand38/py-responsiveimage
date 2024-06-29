@@ -72,6 +72,9 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
+## 1.4.0
+* animated gif and webp uses --size option
+
 ## 1.3.0
 * Multiprocessing on images
 

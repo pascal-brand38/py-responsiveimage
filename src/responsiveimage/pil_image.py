@@ -15,21 +15,7 @@ from . import exif as getexif
 from . import webp
 from . import png
 from . import jpg
-
-def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str) -> bool:
-  '''
-  return True if one of the output is missing
-  In that case, further processing is skipped
-  '''
-  adds = args.args.add_name.split(',')
-  (srcName, srcExt) = os.path.splitext(filename)
-  for add in adds:
-    if not os.path.isfile(os.path.join(args.args.dst_dir, srcName + add + srcExt)):
-      return True
-    if filetype!='webp' and args.args.export_to_webp:
-      if not os.path.isfile(os.path.join(args.args.dst_dir, srcName + add + '.webp')):
-        return True
-  return False
+from . import misc
 
 def resize(image_org: Image.Image, value: str, what: int) -> Image.Image:
   '''
@@ -72,7 +58,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   '''
   create responsive version of the images
   '''
-  if (not args.args.force) and (not missingOutput(args, filename, filetype)):
+  if (not args.args.force) and (not misc.missingOutput(args, filename, filetype)):
     args.print(filename, False, nb)
     return
   args.print(filename, True, nb)
