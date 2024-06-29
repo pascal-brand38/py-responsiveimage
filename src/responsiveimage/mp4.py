@@ -46,6 +46,10 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb:
     for index, _ in enumerate(adds):
       filename_gif = os.path.join(args.args.dst_dir, srcName + adds[index] + '.gif')
       filename_webp = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
+
+      if (not args.args.force) and os.path.isfile(filename_gif) and (os.path.isfile(filename_webp) or not args.args.export_to_webp):
+        continue
+
       # image = resize(image_org, transforms[index], what)
       # scale = "scale=w=" + transforms[index] + ":h=" + transforms[index] + ":force_original_aspect_ratio=decrease"
       scale = "scale=w='min(" + transforms[index] + ",iw)':h='min(" + transforms[index] + ",ih)':force_original_aspect_ratio=decrease"
@@ -75,17 +79,18 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, nb:
         filename_gif])
 
       # mp4 -> webp
-      subprocess.call([
-        'ffmpeg',
-        '-y',
-        '-i', srcFullFilename,
-        '-i', palette,
-        '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
-        '-y',
-        '-loop', '0',
-        '-compression_level', '6',
-        '-loglevel', 'error',
-        filename_webp])
+      if (args.args.export_to_webp):
+        subprocess.call([
+          'ffmpeg',
+          '-y',
+          '-i', srcFullFilename,
+          '-i', palette,
+          '-lavfi', filters + ' [x]; [x][1:v] paletteuse',
+          '-y',
+          '-loop', '0',
+          '-compression_level', '6',
+          '-loglevel', 'error',
+          filename_webp])
 
   else:
 

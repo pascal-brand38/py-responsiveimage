@@ -84,6 +84,10 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
   for index, _ in enumerate(adds):
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
+    dstFullFilenameWebp = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
+    if (not args.args.force) and os.path.isfile(dstFullFilename) and (os.path.isfile(dstFullFilenameWebp) or not args.args.export_to_webp):
+      continue
+
     image = resize(image_org, transforms[index], what)
 
     if filetype == 'jpg':
@@ -96,7 +100,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
     if filetype!='webp' and args.args.export_to_webp:
       dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
-      webp.save(image, srcFullFilename, dstFullFilename, epoch, args)
+      webp.save(image, srcFullFilename, dstFullFilenameWebp, epoch, args)
 
 #       if (args.noRafale) and (epoch!=0) and (epoch-last_epoch < args.noRafale) and (epoch>=last_epoch):
 #         print('Skip as date acquisition too close')
