@@ -65,23 +65,17 @@ def getExif(image: Image.Image, fullFilename:str, ext:str) -> Tuple[Union[Image.
   if not dateTimeOriginal:
     # no acquisition date in exif nor png metadata
     # check if a json file exists (from a google photo for example)
-    try:
-      with open(fullFilename + '.json', encoding='utf-8') as json_file:
-        jsonData = json.load(json_file)
-        epoch = int(jsonData['photoTakenTime']['timestamp'])
-        dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
-    except:
-      pass
-  if not dateTimeOriginal:
-    # no acquisition date in exif nor png metadata
-    # check if a json file exists (from a google photo for example)
-    try:
-      with open(fullFilename + '.supplemental-metadata.json', encoding='utf-8') as json_file:
-        jsonData = json.load(json_file)
-        epoch = int(jsonData['photoTakenTime']['timestamp'])
-        dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
-    except:
-      pass
+    dirname = os.path.dirname(os.path.abspath(fullFilename))
+    filename = os.path.basename(os.path.abspath(fullFilename))
+    jsons = [entry for entry in os.listdir(dirname) if entry.endswith('.json') and entry.startswith(filename) and os.path.isfile(dir + '/' + entry)]
+    if len(jsons) == 1:
+      try:
+        with open(dirname + '/' + jsons[0], encoding='utf-8') as json_file:
+          jsonData = json.load(json_file)
+          epoch = int(jsonData['photoTakenTime']['timestamp'])
+          dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
+      except:
+        pass
 
   if dateTimeOriginal:
     # set in exif + png metadata
