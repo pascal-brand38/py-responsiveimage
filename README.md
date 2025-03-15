@@ -65,6 +65,9 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
   for example process only jpg and png to exclude videos.
   The default value is ```jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov```
 
+* ```--copy``` to copy the files that have a supported format (```jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov```),
+  but not part of the ```--format``` option. This can be useful to copy mp4 file instead of processing them.
+
 * ```--force```: recreate the scaled versions of the images, even when they exist.
 
 <br>
@@ -72,8 +75,10 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
-## 1.4.2
-* json from google photo is suffixed with ```.supplemental-metadata.json```
+## 1.5.0
+* json from google photo with any suffix
+* fall-back when exif is wrong
+* --copy option
 
 ## 1.4.0
 * animated gif and webp uses --size option
@@ -104,3 +109,14 @@ Following capabilities are added:
 ## 1.0.0
 
 Initial version
+
+
+# Development steps
+
+* python -m build
+* python -m pip install .
+* check the following before pushing (sse .github/workflows/pyton-app.yml)
+    * flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    * flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    * pylint --indent-string='  ' --disable C0103,C0200,C0301,C0325,R0912,R0913,R0914,R0915,R1705,W0511,W0621,W0613,W0702,W0718 $(git ls-files '*.py')
+    - pytest tests/png.py tests/export_to_webp.py tests/mp4.py tests/crop.py

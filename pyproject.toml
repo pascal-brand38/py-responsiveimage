@@ -6,7 +6,7 @@
 [project]
   name = "responsiveimage"
   description = "Create different scaled versions of an image, in webp, jpg, png, svg,... to be used on responsive website"
-  version = "1.4.2"
+  version = "1.5.0"
   authors = [
     { name="Pascal Brand", email="pascal.brand38@gmail.com" },
   ]
