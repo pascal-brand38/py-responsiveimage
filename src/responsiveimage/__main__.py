@@ -17,6 +17,8 @@ from . import pil_image
 from . import mp4
 from . import argsResponsiveImage
 
+defaultFormat = 'jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov'
+
 def _createParser() -> argparse.ArgumentParser:
   '''
   parse commandline options
@@ -73,9 +75,13 @@ def _createParser() -> argparse.ArgumentParser:
                       required=False,
                       default=None)
   parser.add_argument('--format',
-                      help='list of formats, separated by commas. Default: jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov',
+                      help='list of formats, separated by commas. Default: ' + defaultFormat,
                       required=False,
-                      default='jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov')
+                      default=defaultFormat)
+  parser.add_argument('--copy',
+                      help='copy the files with supported format, but not in the --format option',
+                      default=False,
+                      action='store_true')
   parser.add_argument('--crop',
                       help='x1,y1,x2,y2: crop the original image before rescaling',
                       required=False,
@@ -133,7 +139,11 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
 
     # See kind.EXTENSION for supported extensions
     if extension not in args.args.format:
-      extensionSkipped.add(extension)
+      if args.args.copy and extension in defaultFormat:
+        copy_filename.append(filename)
+        copy_extension.append(extension)
+      else:
+        extensionSkipped.add(extension)
     else:
       if extension in [ 'jpg', 'png', 'webp' ]:
         pil_image_filename.append(filename)
