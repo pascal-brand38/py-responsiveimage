@@ -72,6 +72,9 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
+## 1.4.2
+* json from google photo is suffixed with ```.supplemental-metadata.json```
+
 ## 1.4.0
 * animated gif and webp uses --size option
 

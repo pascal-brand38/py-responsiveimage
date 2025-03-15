@@ -72,6 +72,16 @@ def getExif(image: Image.Image, fullFilename:str, ext:str) -> Tuple[Union[Image.
         dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
     except:
       pass
+  if not dateTimeOriginal:
+    # no acquisition date in exif nor png metadata
+    # check if a json file exists (from a google photo for example)
+    try:
+      with open(fullFilename + '.supplemental-metadata.json', encoding='utf-8') as json_file:
+        jsonData = json.load(json_file)
+        epoch = int(jsonData['photoTakenTime']['timestamp'])
+        dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
+    except:
+      pass
 
   if dateTimeOriginal:
     # set in exif + png metadata
