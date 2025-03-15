@@ -80,7 +80,11 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
   # from https://stackoverflow.com/questions/13872331/rotating-an-image-with-orientation-specified-in-exif-using-python-without-pil-in
   # if (args.args.rotate):
   #   image_org = ImageOps.exif_transpose(image_org)
-  exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
+  try:
+    exif, epoch = getexif.getExif(image_org, srcFullFilename, filetype)
+  except:
+    exif = None
+    epoch = 0
 
   for index, _ in enumerate(adds):
     dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
