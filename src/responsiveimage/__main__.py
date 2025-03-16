@@ -79,7 +79,7 @@ def _createParser() -> argparse.ArgumentParser:
                       required=False,
                       default=defaultFormat)
   parser.add_argument('--copy',
-                      help='copy the files with supported format, but not in the --format option',
+                      help='copy the files instead of transforming them, and update the creation date',
                       default=False,
                       action='store_true')
   parser.add_argument('--crop',
@@ -139,13 +139,12 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
 
     # See kind.EXTENSION for supported extensions
     if extension not in args.args.format:
-      if args.args.copy and extension in defaultFormat:
+      extensionSkipped.add(extension)
+    else:
+      if args.args.copy:
         copy_filename.append(filename)
         copy_extension.append(extension)
-      else:
-        extensionSkipped.add(extension)
-    else:
-      if extension in [ 'jpg', 'png', 'webp' ]:
+      elif extension in [ 'jpg', 'png', 'webp' ]:
         pil_image_filename.append(filename)
         pil_image_extension.append(extension)
       elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
