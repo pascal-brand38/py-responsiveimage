@@ -21,7 +21,6 @@ def save(
   '''
   save image as png format, as name dstFullFilename
   - use exif is not None
-  - args is used to get webp parameters, as args.parameters['webp']
   - srcFullFilename and epoch are used to keep modification dates
   '''
   if exif:
