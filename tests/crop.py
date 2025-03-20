@@ -6,7 +6,6 @@ Unit testing for cropping
 """
 
 import filecmp
-import tempfile
 from responsiveimage import __main__
 
 def test_export_to_webp():

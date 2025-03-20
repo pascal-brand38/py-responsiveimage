@@ -6,7 +6,6 @@ Unit testing for mp4 only
 """
 
 import os
-import tempfile
 import filetype
 from responsiveimage import __main__
 

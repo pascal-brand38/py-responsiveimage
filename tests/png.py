@@ -6,7 +6,6 @@ Unit testing for png only
 """
 
 import filecmp
-import tempfile
 from responsiveimage import __main__
 
 def test_png():
