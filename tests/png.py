@@ -15,7 +15,8 @@ def test_png():
   """
   srcdir = 'tests/data/png'
   refdir = srcdir + '/' + 'ref'
-  tempdir = tempfile.gettempdir()
+  # tempdir = tempfile.gettempdir()
+  tempdir = 'tests/results/png'
   __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir, '--force' ])
 
   # compare binary files

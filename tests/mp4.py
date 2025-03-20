@@ -30,7 +30,9 @@ def test_mp4():
   """
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
-  resdir = tempfile.gettempdir()
+  # resdir = tempfile.gettempdir()
+  resdir = 'tests/results/mp4-mp4'
+
   __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--force' ])
 
   # this is not possible to compare binary files because of ffmpeg version
@@ -43,7 +45,9 @@ def test_animated():
   """
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
-  resdir = tempfile.gettempdir()
+  # resdir = tempfile.gettempdir()
+  resdir = 'tests/results/mp4-animated'
+
   __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--mp4-as-gif', '--force', '--export-to-webp' ])
 
   # this is not possible to compare binary files because of ffmpeg version

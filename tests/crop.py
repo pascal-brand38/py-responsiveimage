@@ -15,7 +15,8 @@ def test_export_to_webp():
   """
   srcdir = 'tests/data/crop'
   refdir = srcdir + '/' + 'ref'
-  tempdir = tempfile.gettempdir()
+  # tempdir = tempfile.gettempdir()
+  tempdir = 'tests/results/crop'
   __main__.main([
     '--src-dir', srcdir,
     '--dst-dir', tempdir,
