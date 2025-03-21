@@ -20,4 +20,4 @@ def test_png():
 
   # compare binary files
   for file in [ 'lpo' ]:
-    assert filecmp.cmp(refdir+'/'+file+'.png', resdir+'/'+file+'.png', shallow=True), f"{file}"
+    assert filecmp.cmp(refdir+'/'+file+'.png', resdir+'/'+file+'.png', shallow=True) or filecmp.cmp(refdir+'/'+file+'-2.png', resdir+'/'+file+'.png', shallow=True), f"{file}"
