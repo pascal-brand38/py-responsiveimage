@@ -79,5 +79,5 @@ jobs:
     - name: Archive pytest results
       uses: actions/upload-artifact@v4
       with:
-        name: pytest-results
-        path: tests/results/**/*
+        name: my-artifacts
+        path: tests/results
