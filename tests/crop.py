@@ -6,6 +6,7 @@ Unit testing for cropping
 """
 
 import filecmp
+import getresdir
 from responsiveimage import __main__
 
 def test_export_to_webp():
@@ -14,11 +15,10 @@ def test_export_to_webp():
   """
   srcdir = 'tests/data/crop'
   refdir = srcdir + '/' + 'ref'
-  # tempdir = tempfile.gettempdir()
-  tempdir = 'tests/results/crop'
+  resdir = getresdir.resDir('crop')
   __main__.main([
     '--src-dir', srcdir,
-    '--dst-dir', tempdir,
+    '--dst-dir', resdir,
     '--crop', '150,50,300,170',
     '--height', '100',
     '--add-name', '_crop',
@@ -28,4 +28,4 @@ def test_export_to_webp():
   for file in [
     'wwf_crop.jpg'
   ]:
-    assert filecmp.cmp(refdir+'/'+file, tempdir+'/'+file, shallow=True), f"{file}"
+    assert filecmp.cmp(refdir+'/'+file, resdir+'/'+file, shallow=True), f"{file}"

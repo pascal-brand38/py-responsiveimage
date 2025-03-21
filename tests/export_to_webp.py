@@ -6,6 +6,7 @@ Unit testing for png only
 """
 
 import filecmp
+import getresdir
 from responsiveimage import __main__
 
 def test_export_to_webp():
@@ -14,10 +15,9 @@ def test_export_to_webp():
   """
   srcdir = 'tests/data/export_to_webp'
   refdir = srcdir + '/' + 'ref'
-  # tempdir = tempfile.gettempdir()
-  tempdir = 'tests/results/export_to_webp'
+  resdir = getresdir.resDir('export_to_webp')
 
-  __main__.main([ '--src-dir', srcdir, '--dst-dir', tempdir, '--export-to-webp', '--size', '256,128', '--force' ])
+  __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--export-to-webp', '--size', '256,128', '--force' ])
 
   # compare binary files
   for file in [
@@ -25,4 +25,4 @@ def test_export_to_webp():
     'lpo-128.png', 'lpo-128.webp', 'lpo-256.png', 'lpo-256.webp',
     'wwf-128.jpg', 'wwf-128.webp', 'wwf-256.jpg', 'wwf-256.webp',
   ]:
-    assert filecmp.cmp(refdir+'/'+file, tempdir+'/'+file, shallow=True), f"{file}"
+    assert filecmp.cmp(refdir+'/'+file, resdir+'/'+file, shallow=True), f"{file}"

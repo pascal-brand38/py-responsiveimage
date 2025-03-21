@@ -7,6 +7,7 @@ Unit testing for mp4 only
 
 import os
 import filetype
+import getresdir
 from responsiveimage import __main__
 
 def check_file(refdir, resdir, file, ext):
@@ -29,8 +30,7 @@ def test_mp4():
   """
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
-  # resdir = tempfile.gettempdir()
-  resdir = 'tests/results/mp4-mp4'
+  resdir = getresdir.resDir('mp4-mp4')
 
   __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--force' ])
 
@@ -44,8 +44,7 @@ def test_animated():
   """
   srcdir = 'tests/data/mp4'
   refdir = srcdir + '/' + 'ref'
-  # resdir = tempfile.gettempdir()
-  resdir = 'tests/results/mp4-animated'
+  resdir = getresdir.resDir('mp4-animated')
 
   __main__.main([ '--src-dir', srcdir, '--dst-dir', resdir, '--mp4-as-gif', '--force', '--export-to-webp' ])
 
