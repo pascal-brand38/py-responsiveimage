@@ -8,10 +8,16 @@ Unit testing utility
 import os
 
 def resDir(test: str):
-  dir = 'tests/results'
-  if not os.path.exists(dir):
-    os.makedirs(dir)
-  dir = dir + '/' + test
-  if not os.path.exists(dir):
-    os.makedirs(dir)
-  return dir
+  """
+  get results dir, for artifacts, and create it if necessary
+  - extension are the same
+  - size are the same, up to 25%
+  """
+
+  res = 'tests/results'
+  if not os.path.exists(res):
+    os.makedirs(res)
+  res = res + '/' + test
+  if not os.path.exists(res):
+    os.makedirs(res)
+  return res
