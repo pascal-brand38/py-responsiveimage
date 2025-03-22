@@ -75,6 +75,11 @@ python -m responsiveimage --src-dir <srcdir> --dst-dir <dstdir>
 _____________________
 # Releases
 
+## 1.6.0
+* --copy option behavior update: copy the files instead of transforming them. Of course,
+  the creation date is updated accordingly,
+  for example using the json dat
+
 ## 1.5.0
 * json from google photo with any suffix
 * fall-back when exif is wrong
