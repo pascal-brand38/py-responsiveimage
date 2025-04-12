@@ -65,9 +65,10 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
 
   srcFullFilename = os.path.join(args.args.src_dir, filename)
   image_org = Image.open(srcFullFilename)
-  image_org = crop(image_org, args.args.crop)
+  dstFilename = misc.getDstFilename(args, filename, filetype, image_org)
+  (dstName, dstExt) = os.path.splitext(dstFilename)
 
-  (srcName, srcExt) = os.path.splitext(filename)
+  image_org = crop(image_org, args.args.crop)
 
   adds = args.args.add_name.split(',')
   if args.args.size is not None:
@@ -87,8 +88,8 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
     epoch = 0
 
   for index, _ in enumerate(adds):
-    dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + srcExt)
-    dstFullFilenameWebp = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
+    dstFullFilename = os.path.join(args.args.dst_dir, dstName + adds[index] + dstExt)
+    dstFullFilenameWebp = os.path.join(args.args.dst_dir, dstName + adds[index] + '.webp')
     if (not args.args.force) and os.path.isfile(dstFullFilename) and (os.path.isfile(dstFullFilenameWebp) or not args.args.export_to_webp):
       continue
 
@@ -103,7 +104,6 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename: str, fil
       png.save(image, srcFullFilename, dstFullFilename, exif, epoch, args)
 
     if filetype!='webp' and args.args.export_to_webp:
-      dstFullFilename = os.path.join(args.args.dst_dir, srcName + adds[index] + '.webp')
       webp.save(image, srcFullFilename, dstFullFilenameWebp, epoch, args)
 
 #       if (args.noRafale) and (epoch!=0) and (epoch-last_epoch < args.noRafale) and (epoch>=last_epoch):
