@@ -67,7 +67,7 @@ def getExif(image: Image.Image, fullFilename:str, ext:str) -> Tuple[Union[Image.
     # check if a json file exists (from a google photo for example)
     dirname = os.path.dirname(os.path.abspath(fullFilename))
     filename = os.path.basename(os.path.abspath(fullFilename))
-    jsons = [entry for entry in os.listdir(dirname) if entry.endswith('.json') and entry.startswith(filename) and os.path.isfile(dir + '/' + entry)]
+    jsons = [entry for entry in os.listdir(dirname) if entry.endswith('.json') and entry.startswith(filename) and os.path.isfile(dirname + '/' + entry)]
     if len(jsons) == 1:
       try:
         with open(dirname + '/' + jsons[0], encoding='utf-8') as json_file:

@@ -8,7 +8,10 @@ bare-copy of the file
 import os
 import shutil
 import filecmp
+from PIL import Image   # python -m pip install --upgrade pillow
 from . import argsResponsiveImage
+from . import misc
+from . import exif as getexif
 
 def _copy_file(filename_src:str, filename_dst:str) -> None:
   '''
@@ -27,9 +30,17 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype
   get the responsive version of the image by copying it only
   used for gif and svg
   '''
-  if (not args.args.force) and (os.path.isfile(os.path.join(args.args.dst_dir, filename))):
+  srcFullFilename = os.path.join(args.args.src_dir, filename)
+  image = Image.open(srcFullFilename)
+  dstFilename = misc.getDstFilename(args, filename, filetype, image)
+  dstFullFilename = os.path.join(args.args.dst_dir, dstFilename)
+
+  if (not args.args.force) and (os.path.isfile(dstFullFilename)):
     args.print(filename, False, nb)
     return
 
   args.print(filename, True, nb)
-  _copy_file(os.path.join(args.args.src_dir, filename), os.path.join(args.args.dst_dir, filename))
+  _copy_file(srcFullFilename, dstFullFilename)
+
+  exif, epoch = getexif.getExif(image, srcFullFilename, filetype)
+  getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)

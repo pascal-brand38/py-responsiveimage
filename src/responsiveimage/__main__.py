@@ -82,6 +82,10 @@ def _createParser() -> argparse.ArgumentParser:
                       help='copy the files instead of transforming them, and update the creation date',
                       default=False,
                       action='store_true')
+  parser.add_argument('--rename',
+                      help='rename using the creation date',
+                      default=False,
+                      action='store_true')
   parser.add_argument('--crop',
                       help='x1,y1,x2,y2: crop the original image before rescaling',
                       required=False,
