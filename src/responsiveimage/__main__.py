@@ -15,6 +15,7 @@ import filetype
 from . import copy_image
 from . import pil_image
 from . import mp4
+from . import misc
 from . import argsResponsiveImage
 
 defaultFormat = 'jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov'
@@ -148,13 +149,13 @@ def extract(args: argsResponsiveImage.argsResponsiveImage) -> Tuple[set, List[st
       if args.args.copy:
         copy_filename.append(filename)
         copy_extension.append(extension)
-      elif extension in [ 'jpg', 'png', 'webp' ]:
+      elif extension in misc.imgExtensions:
         pil_image_filename.append(filename)
         pil_image_extension.append(extension)
-      elif extension in [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]:
+      elif extension in misc.videoExtensions:
         video_filename.append(filename)
         video_extension.append(extension)
-      elif extension in [ 'gif', 'svg' ]:
+      elif extension in misc.otherExtensions:
         copy_filename.append(filename)
         copy_extension.append(extension)
       else:
