@@ -137,4 +137,6 @@ python -m build
 python -m twine upload dist/* --verbose --skip-existing
     id = __token__
     password: py-XXX  (the private API token)
+  or
+    Enter your API token: pypi-XXX  (the private API token)
 ```
