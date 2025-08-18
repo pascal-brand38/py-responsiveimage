@@ -125,3 +125,16 @@ Initial version
     * flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     * pylint --indent-string='  ' --disable C0103,C0200,C0301,C0325,R0912,R0913,R0914,R0915,R0917,R1705,W0511,W0621,W0613,W0702,W0718 $(git ls-files '*.py')
     * pytest tests/png.py tests/export_to_webp.py tests/mp4.py tests/crop.py
+
+
+To publish:
+```
+Update version in pyproject.toml
+git tag "x.y.z"
+git push --tags
+rm -rf dist src/*.egg-info
+python -m build
+python -m twine upload dist/* --verbose --skip-existing
+    id = __token__
+    password: py-XXX  (the private API token)
+```
