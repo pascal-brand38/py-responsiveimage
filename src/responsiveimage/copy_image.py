@@ -31,7 +31,11 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype
   used for gif and svg
   '''
   srcFullFilename = os.path.join(args.args.src_dir, filename)
-  image = Image.open(srcFullFilename)
+  # try-catch as svg cannot be opened
+  try:
+    image = Image.open(srcFullFilename)
+  except:
+    image = None
   dstFilename = misc.getDstFilename(args, filename, filetype, image)
   dstFullFilename = os.path.join(args.args.dst_dir, dstFilename)
 
@@ -42,5 +46,7 @@ def responsive(args: argsResponsiveImage.argsResponsiveImage, filename, filetype
   args.print(filename, True, nb)
   _copy_file(srcFullFilename, dstFullFilename)
 
-  exif, epoch = getexif.getExif(image, srcFullFilename, filetype)
-  getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)
+  # update stats info on the image from exif if possible
+  if (image is not None):
+    _, epoch = getexif.getExif(image, srcFullFilename, filetype)
+    getexif.updateFilestat(srcFullFilename, dstFullFilename, epoch)

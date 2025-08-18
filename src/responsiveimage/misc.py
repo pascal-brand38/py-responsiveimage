@@ -6,11 +6,11 @@ create responsive images, based on list of sizes
 '''
 
 import os
+import re
+from time import strftime, localtime
+from PIL import Image
 from . import argsResponsiveImage
 from . import exif as getexif
-from PIL import Image
-from time import strftime, localtime
-import re
 
 def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, filetype: str) -> bool:
   '''
@@ -29,6 +29,11 @@ def missingOutput(args: argsResponsiveImage.argsResponsiveImage, filename: str, 
 
 
 def getDstFilename(args: argsResponsiveImage.argsResponsiveImage, srcFilename: str, filetype: str, image: Image.Image) -> bool:
+  '''
+  get the destination filename
+  when renaming is asked for, it contains the creation date
+  when no renaming, this is the same as the source filenmae
+  '''
   if not(args.args.rename):
     return srcFilename
 
@@ -40,7 +45,7 @@ def getDstFilename(args: argsResponsiveImage.argsResponsiveImage, srcFilename: s
     return srcFilename
 
   srcFullFilename = os.path.join(args.args.src_dir, srcFilename)
-  exif, epoch = getexif.getExif(image, srcFullFilename, filetype)
+  _, epoch = getexif.getExif(image, srcFullFilename, filetype)
 
   if (epoch != 0):
     # dst srcFilename is renamed using the date of the file
