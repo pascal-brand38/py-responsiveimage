@@ -40,7 +40,7 @@ def getDstFilename(args: argsResponsiveImage.argsResponsiveImage, srcFilename: s
   dstFilename = srcFilename
   (srcName, srcExt) = os.path.splitext(srcFilename)
   dirName = os.path.dirname(srcFilename)
-  if re.match(r'^[0-9]{8}_[0-9]{6}$', srcName):     # the acquisition date followed by the time
+  if re.match(r'^[0-9]{8}_[0-9]{6}', srcName):     # the acquisition date followed by the time
     # no rename as already the correct filename
     return srcFilename
 
@@ -49,7 +49,7 @@ def getDstFilename(args: argsResponsiveImage.argsResponsiveImage, srcFilename: s
 
   if (epoch != 0):
     # dst srcFilename is renamed using the date of the file
-    dstFilename = os.path.join(dirName, strftime('%Y%m%d_%H%M%S', localtime(epoch)) + srcExt)
+    dstFilename = os.path.join(dirName, strftime('%Y%m%d_%H%M%S', localtime(epoch)) + '-' + srcName + srcExt)
 
   # print(srcFilename, ' ==> ', dstFilename)
   return dstFilename
