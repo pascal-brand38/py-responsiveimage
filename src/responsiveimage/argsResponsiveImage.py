@@ -14,7 +14,7 @@ def _check_arg_errors(argsparsed: argparse.Namespace) -> argparse.Namespace:
     raise RuntimeError("--size and --height cannot be both set")
 
   if (argsparsed.size is None) and (argsparsed.height is None):
-    argsparsed.size = '1920'
+    argsparsed.size = '3840'
 
   if (argsparsed.size is not None):
     transform = argsparsed.size.split(',')

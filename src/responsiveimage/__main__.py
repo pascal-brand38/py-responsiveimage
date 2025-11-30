@@ -49,7 +49,7 @@ def _createParser() -> argparse.ArgumentParser:
                       required=False,
                       default='/tmp/reduced')
   parser.add_argument('--size',
-                      help='list of sizes, separated by commas, of different scale. Ex: 1024,512. Default: 1920px if --height not set',
+                      help='list of sizes, separated by commas, of different scale. Ex: 1024,512. Default: 3840px (4K) if --height not set',
                       required=False,
                       default=None)
   parser.add_argument('--height',
