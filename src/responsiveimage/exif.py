@@ -15,6 +15,9 @@ import shutil
 import os
 from PIL import Image   # python -m pip install --upgrade pillow
 from PIL import ExifTags   # python -m pip install --upgrade pillow
+import os
+import platform
+
 
 def printExifTags(exif: Image.Exif) -> None:
   '''
@@ -77,6 +80,10 @@ def getExif(image: Image.Image, fullFilename:str, ext:str) -> Tuple[Union[Image.
       except:
         pass
 
+  if not dateTimeOriginal:
+    epoch = int(creation_date(fullFilename))
+    dateTimeOriginal = datetime.fromtimestamp(epoch).strftime('%Y:%m:%d %H:%M:%S')
+
   if dateTimeOriginal:
     # set in exif + png metadata
     if info:
@@ -96,3 +103,35 @@ def updateFilestat(srcFullFilename: str, dstFullFilename: str, epoch: Union[floa
   shutil.copystat(srcFullFilename, dstFullFilename)
   if (epoch is not None) and (epoch != 0):
     os.utime(dstFullFilename, (epoch, epoch))
+
+
+# Adapted from https://stackoverflow.com/questions/237079/how-do-i-get-file-creation-and-modification-date-times
+def creation_date(path_to_file):
+  """
+  Try to get the Unix timestamp that a file was created, falling back to when
+  it was last modified if that isn't possible.
+  See http://stackoverflow.com/a/39501288/1709587 for explanation.
+  """
+  if platform.system() == 'Windows':
+    creation = os.path.getctime(path_to_file)
+    modified = os.path.getmtime(path_to_file)
+    if (creation < modified):
+      return creation
+    return modified
+  else:
+    stat = os.stat(path_to_file)
+    try:
+      return stat.st_birthtime
+    except AttributeError:
+      # We're probably on Linux. Hopefully, we are on a recent enough
+      # version that we can use the statx syscall. (If we are not, btime
+      # below will be `None`.)
+      # btime = statx(path_to_file).btime
+      # if btime:
+      #   return btime
+      pass
+
+  # If we've made it this far, all our efforts have failed. Fall back to
+  # returning last-modified time as the closest available alternative:
+  # return os.path.getmtime(path_to_file)
+  return 0
