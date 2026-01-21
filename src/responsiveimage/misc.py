@@ -56,4 +56,4 @@ def getDstFilename(args: argsResponsiveImage.argsResponsiveImage, srcFilename: s
 
 imgExtensions = [ 'jpg', 'png', 'webp' ]
 videoExtensions = [ 'mp4', 'mts', 'avi', 'wmv', 'mov' ]
-otherExtensions = [ 'gif', 'svg' ]
+otherExtensions = [ 'gif', 'svg', 'heic' ]

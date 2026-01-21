@@ -18,7 +18,7 @@ from . import mp4
 from . import misc
 from . import argsResponsiveImage
 
-defaultFormat = 'jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov'
+defaultFormat = 'jpg,png,webp,gif,svg,mp4,mts,avi,wmv,mov,heic'
 
 def _createParser() -> argparse.ArgumentParser:
   '''
